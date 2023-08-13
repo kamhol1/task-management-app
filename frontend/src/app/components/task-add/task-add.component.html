@@ -1,0 +1,36 @@
+<div>
+  <div class="w-50">
+    <form (ngSubmit)="onSubmit(form)" #form="ngForm">
+      <label for="title">Title: </label>
+      <input class="form-control" type="text" #title="ngModel" id="title" name="title" [(ngModel)]="task.title" required />
+
+      <label for="description">Description: </label>
+      <textarea class="form-control" rows="8" #description="ngModel" id="description" name="description" [(ngModel)]="task.description"></textarea>
+
+      <label for="category">Category: </label>
+      <select class="form-control" #category="ngModel" id="category" name="category" [(ngModel)]="task.category" required>
+        <option *ngFor="let category of categories" [ngValue]="category.id">{{ category.name }}</option>
+      </select>
+
+      <label for="priority">Priority: </label>
+      <select class="form-control" #priority="ngModel" id="priority" name="priority" [(ngModel)]="task.priority" required>
+        <option value="LOW">Low</option>
+        <option value="MEDIUM">Medium</option>
+        <option value="HIGH">High</option>
+      </select>
+
+      <label for="targetTime">Target time: </label>
+      <input class="form-control" type="datetime-local" #targetTime="ngModel" id="targetTime" name="targetTime" [(ngModel)]="task.targetTime" /> <br/>
+
+      <button class="btn btn-primary" type="submit">
+        <i class="bi bi-check2 mr-2"></i>Save
+      </button>
+    </form> <br/>
+
+    <button class="btn btn-secondary" (click)="this.goToTaskList()">
+      <i class="bi bi-arrow-left mr-2"></i>Back
+    </button>
+  </div>
+
+
+</div>

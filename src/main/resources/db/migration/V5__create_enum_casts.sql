@@ -1,0 +1,2 @@
+CREATE CAST (varchar AS status_enum) WITH INOUT AS IMPLICIT;
+CREATE CAST (varchar AS priority_enum) WITH INOUT AS IMPLICIT;

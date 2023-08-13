@@ -1,0 +1,45 @@
+<div>
+  <table class="table m-auto">
+    <thead class="table-dark">
+    <tr>
+      <th>Id</th>
+      <th>Title</th>
+      <th>Status</th>
+      <th>Priority</th>
+      <th>Target time</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let task of tasks" (dblclick)="goToTask(task.id)">
+      <td class="col-1">{{ task.id }}</td>
+      <td class="col">{{ task.title }}</td>
+      <td class="col-2">{{ task.status |replace : '_' : ' '  |titlecase }}</td>
+      <td class="col-2">{{ task.priority |titlecase }}</td>
+      <td class="col-2">{{ task.targetTime |date : "dd-MM-y HH:mm:ss" }}</td>
+<!--        <button type="button" class="btn btn-success py-1 px-2 me-1" [routerLink]="['edit', employee.id]">M</button>-->
+<!--        <button type="button" class="btn btn-danger py-1 px-2 me-1" (click)="deactivateEmployee($event, employee.id)">U</button>-->
+<!--        <button type="button" class="btn btn-primary p-1" [routerLink]="['managers', employee.id]">WP</button>-->
+    </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="tasks.length == 0">
+    Could not find tasks with selected criteria
+  </div> <br/>
+
+  <div>
+    <span>Showing {{ 1 + offset }} - {{ page * size + numberOfElements }} </span> <span>of {{ totalElements }}</span>
+    <button class="btn btn-link" (click)="previousPage()">
+      <i class="bi bi-caret-left"></i>Prev
+    </button>
+    <button class="btn btn-link" (click)="nextPage()">
+      Next<i class="bi bi-caret-right"></i>
+    </button>
+  </div> <br/>
+
+  <div>
+    <button class="btn btn-primary" [routerLink]="['add']">
+      <i class="bi bi-plus-lg mr-2"></i>Create task
+    </button>
+  </div>
+</div>

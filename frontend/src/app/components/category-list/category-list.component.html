@@ -1,0 +1,30 @@
+<div>
+  <table class="table m-auto">
+    <thead class="table-dark">
+    <tr>
+      <th>Id</th>
+      <th>Name</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let category of categories">
+        <td class="col-1">{{ category.id }}</td>
+        <td class="col">
+          <input class="w-100" type="text" [(ngModel)]="category.name" value="{{ category.name }}">
+        </td>
+        <td class="col-2">
+          <button class="btn btn-primary py-1 me-3" (click)="updateCategory(category.id, category)">Save</button>
+          <button class="btn btn-danger py-1" (click)="hideCategory(category.id)">Delete</button>
+        </td>
+      <!--        <button type="button" class="btn btn-success py-1 px-2 me-1" [routerLink]="['edit', employee.id]">M</button>-->
+      <!--        <button type="button" class="btn btn-danger py-1 px-2 me-1" (click)="deactivateEmployee($event, employee.id)">U</button>-->
+      <!--        <button type="button" class="btn btn-primary p-1" [routerLink]="['managers', employee.id]">WP</button>-->
+    </tr>
+    </tbody>
+  </table>
+
+  <div class="mt-5 w-50">
+    <app-category-form></app-category-form>
+  </div>
+</div>
