@@ -2,6 +2,7 @@ package com.example.taskmanagementapp.service;
 
 import com.example.taskmanagementapp.dto.CategoryDto;
 import com.example.taskmanagementapp.dto.CategoryReadDto;
+import com.example.taskmanagementapp.exception.CategoryNotFoundException;
 import com.example.taskmanagementapp.model.Category;
 import com.example.taskmanagementapp.repository.CategoryRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -38,7 +39,7 @@ public class CategoryService {
     @Transactional
     public void updateCategory(int id, CategoryDto categoryDto) {
         Category toUpdate = categoryRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException("Category not found")
+                () -> new CategoryNotFoundException(id)
         );
 
         categoryRepository.save(mapToCategory(categoryDto, toUpdate));
@@ -47,7 +48,7 @@ public class CategoryService {
     @Transactional
     public void hideCategory(int id) {
         Category category = categoryRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException("Category not found")
+                () -> new CategoryNotFoundException(id)
         );
 
         category.setHidden(true);
