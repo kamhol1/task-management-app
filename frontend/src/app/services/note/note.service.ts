@@ -13,7 +13,15 @@ export class NoteService {
 
   constructor(private http: HttpClient) { }
 
+  getNote(id: number): Observable<any> {
+    return this.http.get(this.apiUrl + '/' + id);
+  }
+
   saveNote(note: NoteWriteModel): Observable<NoteWriteModel> {
     return this.http.post<NoteWriteModel>(this.apiUrl, note);
+  }
+
+  updateNote(id: number, note: NoteReadModel) {
+    return this.http.put(this.apiUrl + '/' + id, note);
   }
 }

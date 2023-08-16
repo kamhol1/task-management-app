@@ -1,4 +1,5 @@
 export interface NoteReadModel {
-  content: string;
-  createdOn: string;
+  id: number
+  content: string
+  createdOn: string
 }

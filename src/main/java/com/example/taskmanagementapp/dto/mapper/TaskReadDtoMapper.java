@@ -1,9 +1,7 @@
 package com.example.taskmanagementapp.dto.mapper;
 
-import com.example.taskmanagementapp.dto.NoteReadDto;
 import com.example.taskmanagementapp.dto.TaskReadDto;
 import com.example.taskmanagementapp.dto.TaskReadWithNotesDto;
-import com.example.taskmanagementapp.model.Note;
 import com.example.taskmanagementapp.model.Task;
 
 import java.util.List;
@@ -24,7 +22,7 @@ public class TaskReadDtoMapper {
                 .priority(task.getPriority())
                 .targetTime(task.getTargetTime())
                 .createdOn(task.getCreatedOn())
-                .notes(mapToNoteReadDtoList(task))
+                .notes(NoteDtoMapper.mapToNoteReadDtoList(task))
                 .build();
     }
 
@@ -41,19 +39,6 @@ public class TaskReadDtoMapper {
                 .status(task.getStatus())
                 .priority(task.getPriority())
                 .targetTime(task.getTargetTime())
-                .build();
-    }
-// TODO: move to NoteDtoMapper
-    private static List<NoteReadDto> mapToNoteReadDtoList(Task task) {
-        return task.getNotes().stream()
-                .map(TaskReadDtoMapper::mapToNoteReadDto)
-                .collect(Collectors.toList());
-    }
-
-    private static NoteReadDto mapToNoteReadDto(Note note) {
-        return NoteReadDto.builder()
-                .content(note.getContent())
-                .createdOn(note.getCreatedOn())
                 .build();
     }
 }

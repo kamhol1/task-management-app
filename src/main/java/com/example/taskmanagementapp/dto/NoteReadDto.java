@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 @Getter
 @Builder
 public class NoteReadDto {
+    private int id;
     private String content;
     private LocalDateTime createdOn;
 }

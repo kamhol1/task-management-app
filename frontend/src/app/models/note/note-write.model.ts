@@ -1,4 +1,4 @@
 export interface NoteWriteModel {
-  content: string;
-  task: number;
+  content: string
+  task: number
 }
