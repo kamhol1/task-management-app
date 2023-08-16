@@ -5,9 +5,9 @@ import com.example.taskmanagementapp.dto.TaskReadDto;
 import com.example.taskmanagementapp.dto.TaskReadWithNotesDto;
 import com.example.taskmanagementapp.service.TaskService;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/tasks")
@@ -20,34 +20,39 @@ public class TaskController {
         this.taskService = taskService;
     }
 
-    @GetMapping("/not-completed")
-    List<TaskReadDto> getAllNotCompletedTasks(@RequestParam(required = false) Integer page,
-                                              @RequestParam(required = false) Integer size) {
+    @GetMapping("/active")
+    ResponseEntity<Page<TaskReadDto>> getAllActiveTasks(@RequestParam(required = false) Integer page,
+                                        @RequestParam(required = false) Integer size) {
         int pageNumber = page != null && page >= 0 ? page : 0;
-        int pageSize = size != null && size >= 0 ? size : 25;
-        return taskService.getAllNotCompletedTasks(pageNumber, pageSize);
+        int pageSize = size != null && size >= 0 ? size : 10;
+        return ResponseEntity.ok(
+                taskService.getAllActiveTasks(pageNumber, pageSize));
     }
 
     @GetMapping("")
-    Page<TaskReadDto> getAllTasks(@RequestParam(required = false) Integer page,
+    ResponseEntity<Page<TaskReadDto>> getAllTasks(@RequestParam(required = false) Integer page,
                                   @RequestParam(required = false) Integer size) {
         int pageNumber = page != null && page >= 0 ? page : 0;
-        int pageSize = size != null && size >= 0 ? size : 25;
-        return taskService.getAllTasks(pageNumber, pageSize);
+        int pageSize = size != null && size >= 0 ? size : 10;
+        return ResponseEntity.ok(
+                taskService.getAllTasks(pageNumber, pageSize));
     }
 
     @GetMapping("/{id}")
-    TaskReadWithNotesDto getTask(@PathVariable int id) {
-        return taskService.getTask(id);
+    ResponseEntity<TaskReadWithNotesDto> getTask(@PathVariable int id) {
+        return ResponseEntity.ok(
+                taskService.getTask(id));
     }
 
     @PostMapping("")
-    void createTask(@RequestBody TaskDto taskDto) {
+    ResponseEntity<MessageResponse> createTask(@RequestBody TaskDto taskDto) {
         taskService.createTask(taskDto);
+        return new ResponseEntity<>(new MessageResponse("New task created successfully"), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    void updateTask(@PathVariable int id, @RequestBody TaskDto taskDto) {
+    ResponseEntity<MessageResponse> updateTask(@PathVariable int id, @RequestBody TaskDto taskDto) {
         taskService.updateTask(id, taskDto);
+        return ResponseEntity.ok(new MessageResponse("Task updated successfully"));
     }
 }

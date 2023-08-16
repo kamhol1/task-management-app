@@ -5,6 +5,7 @@ import {NgForm} from "@angular/forms";
 import {Router} from "@angular/router";
 import {CategoryService} from "../../services/category/category.service";
 import {CategoryModel} from "../../models/category/category.model";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-task-add',
@@ -17,7 +18,8 @@ export class TaskAddComponent implements OnInit {
 
   constructor(private taskService: TaskService,
               private categoryService: CategoryService,
-              private router: Router) { }
+              private router: Router,
+              private snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
     this.task = {
@@ -34,8 +36,14 @@ export class TaskAddComponent implements OnInit {
         next: categories => {
           this.categories = categories;
         },
-        error: error => {
-          console.log(error);
+        error: err => {
+          this.snackBar.open(err.error.message,
+            'OK',
+            {
+              verticalPosition: 'top',
+              panelClass: ['app-notification-error'],
+              duration: 5000
+            });
         }
       });
   }
@@ -45,11 +53,23 @@ export class TaskAddComponent implements OnInit {
       this.taskService.saveTask(this.task)
         .subscribe({
           next: res => {
-            console.log(res);
+            this.snackBar.open(res.message,
+              'OK',
+              {
+                verticalPosition: 'top',
+                panelClass: ['app-notification-success'],
+                duration: 5000
+              });
             this.goToTaskList();
           },
           error: err => {
-            console.log(err);
+            this.snackBar.open(err.error.message,
+              'OK',
+              {
+                verticalPosition: 'top',
+                panelClass: ['app-notification-error'],
+                duration: 5000
+              });
           }
         });
     }

@@ -18,18 +18,18 @@ export class TaskService {
     let params = new HttpParams()
       .set('page', page);
 
-    return this.http.get<TaskModel[]>(this.apiUrl, { params });
+    return this.http.get<TaskModel[]>(this.apiUrl + '/active', { params });
   }
 
   getTask(taskId: number): Observable<TaskDetailsModel> {
     return this.http.get<TaskDetailsModel>(this.apiUrl + '/' + taskId);
   }
 
-  saveTask(task: TaskWriteModel) {
+  saveTask(task: TaskWriteModel): Observable<any> {
     return this.http.post(this.apiUrl, task);
   }
 
-  updateTask(taskId: number, task: TaskWriteModel) {
+  updateTask(taskId: number, task: TaskWriteModel): Observable<any> {
     return this.http.put(this.apiUrl + '/' + taskId, task)
   }
 }

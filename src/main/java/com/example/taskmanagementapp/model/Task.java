@@ -48,6 +48,7 @@ public class Task {
     @Column(name = "updated_on", columnDefinition = "timestamp", nullable = false)
     private LocalDateTime updatedOn;
 
+    @OrderBy("id DESC")
     @OneToMany(mappedBy = "task")
     private List<Note> notes;
 

@@ -29,4 +29,15 @@ public class TaskDtoMapper {
 
         return toUpdate;
     }
+
+    public static TaskDto mapToTaskDto(Task task) {
+        return TaskDto.builder()
+                .title(task.getTitle())
+                .description(task.getDescription())
+                .category(task.getCategory().getId())
+                .status(task.getStatus())
+                .priority(task.getPriority())
+                .targetTime(task.getTargetTime())
+                .build();
+    }
 }

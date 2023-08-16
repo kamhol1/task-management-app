@@ -13,7 +13,7 @@ import java.util.List;
 public interface TaskRepository extends JpaRepository<Task, Integer> {
 
     @Query("select t from Task t where t.status != 'COMPLETED' AND t.status != 'CANCELLED'")
-    List<Task> findAllNotCompletedTasks(Pageable page);
+    Page<Task> findAllActiveTasks(Pageable page);
 
     Page<Task> findAll(Pageable page);
 }

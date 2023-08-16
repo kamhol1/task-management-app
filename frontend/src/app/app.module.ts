@@ -14,6 +14,9 @@ import { TaskAddComponent } from './components/task-add/task-add.component';
 import {NavbarComponent} from "./components/navbar/navbar.component";
 import { CategoryListComponent } from './components/category-list/category-list.component';
 import { CategoryFormComponent } from './components/category-form/category-form.component';
+import {MDCSnackbar} from "@material/snackbar";
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {MatSnackBarModule} from "@angular/material/snack-bar";
 
 @NgModule({
   declarations: [
@@ -32,7 +35,9 @@ import { CategoryFormComponent } from './components/category-form/category-form.
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    BrowserAnimationsModule,
+    MatSnackBarModule
   ],
   providers: [],
   bootstrap: [AppComponent]

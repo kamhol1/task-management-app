@@ -11,7 +11,7 @@ import {Router} from "@angular/router";
 export class TaskListComponent implements OnInit {
   tasks: TaskModel[] = [];
   page: number = 0;
-  size = 25;
+  size = 10;
   totalPages!: number;
   totalElements!: number;
   numberOfElements!: number;

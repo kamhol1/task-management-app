@@ -5,14 +5,12 @@ import com.example.taskmanagementapp.dto.CategoryReadDto;
 import com.example.taskmanagementapp.exception.CategoryNotFoundException;
 import com.example.taskmanagementapp.model.Category;
 import com.example.taskmanagementapp.repository.CategoryRepository;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.example.taskmanagementapp.dto.mapper.CategoryDtoMapper.mapToCategory;
-import static com.example.taskmanagementapp.dto.mapper.CategoryDtoMapper.mapToCategoryReadDtoList;
+import static com.example.taskmanagementapp.dto.mapper.CategoryDtoMapper.*;
 
 @Service
 public class CategoryService {
@@ -32,26 +30,29 @@ public class CategoryService {
     }
 
     @Transactional
-    public void createCategory(CategoryDto categoryDto) {
-        categoryRepository.save(mapToCategory(categoryDto));
+    public CategoryReadDto createCategory(CategoryDto categoryDto) {
+        Category created = categoryRepository.save(mapToCategory(categoryDto));
+        return mapToCategoryReadDto(created);
     }
 
     @Transactional
-    public void updateCategory(int id, CategoryDto categoryDto) {
+    public CategoryReadDto updateCategory(int id, CategoryDto categoryDto) {
         Category toUpdate = categoryRepository.findById(id).orElseThrow(
                 () -> new CategoryNotFoundException(id)
         );
 
-        categoryRepository.save(mapToCategory(categoryDto, toUpdate));
+        Category updated = categoryRepository.save(mapToCategory(categoryDto, toUpdate));
+        return mapToCategoryReadDto(updated);
     }
 
     @Transactional
-    public void hideCategory(int id) {
+    public CategoryReadDto hideCategory(int id) {
         Category category = categoryRepository.findById(id).orElseThrow(
                 () -> new CategoryNotFoundException(id)
         );
 
         category.setHidden(true);
-        categoryRepository.save(category);
+        Category updated = categoryRepository.save(category);
+        return mapToCategoryReadDto(updated);
     }
 }

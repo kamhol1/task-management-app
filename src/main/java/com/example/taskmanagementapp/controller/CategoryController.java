@@ -3,6 +3,8 @@ package com.example.taskmanagementapp.controller;
 import com.example.taskmanagementapp.dto.CategoryDto;
 import com.example.taskmanagementapp.dto.CategoryReadDto;
 import com.example.taskmanagementapp.service.CategoryService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,22 +21,26 @@ public class CategoryController {
     }
 
     @GetMapping("")
-    List<CategoryReadDto> getNotHiddenCategories() {
-        return categoryService.getNotHiddenCategories();
+    ResponseEntity<List<CategoryReadDto>> getNotHiddenCategories() {
+        return ResponseEntity.ok(
+                categoryService.getNotHiddenCategories());
     }
 
     @PostMapping("")
-    void createCategory(@RequestBody CategoryDto categoryDto) {
-        categoryService.createCategory(categoryDto);
+    ResponseEntity<MessageResponse> createCategory(@RequestBody CategoryDto categoryDto) {
+        CategoryReadDto created = categoryService.createCategory(categoryDto);
+        return new ResponseEntity<>(new MessageResponse("Category \"" + created.getName() + "\" created successfully"), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    void updateCategory(@PathVariable int id, @RequestBody CategoryDto categoryDto) {
-        categoryService.updateCategory(id, categoryDto);
+    ResponseEntity<MessageResponse> updateCategory(@PathVariable int id, @RequestBody CategoryDto categoryDto) {
+        CategoryReadDto updated = categoryService.updateCategory(id, categoryDto);
+        return ResponseEntity.ok(new MessageResponse("Category with id " + updated.getId() + " has been updated successfully"));
     }
 
     @PatchMapping("/{id}/hide")
-    void hideCategory(@PathVariable int id) {
-        categoryService.hideCategory(id);
+    ResponseEntity<MessageResponse> hideCategory(@PathVariable int id) {
+        CategoryReadDto updated = categoryService.hideCategory(id);
+        return ResponseEntity.ok(new MessageResponse("Category with id " + updated.getId() + " has been deleted"));
     }
 }

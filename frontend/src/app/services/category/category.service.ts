@@ -17,15 +17,15 @@ export class CategoryService {
     return this.http.get<CategoryModel[]>(this.apiUrl);
   }
 
-  saveCategory(category: CategoryWriteModel): Observable<CategoryModel> {
-    return this.http.post<CategoryModel>(this.apiUrl, category);
+  saveCategory(category: CategoryWriteModel): Observable<any> {
+    return this.http.post(this.apiUrl, category);
   }
 
-  updateCategory(id: number, category: CategoryWriteModel) {
+  updateCategory(id: number, category: CategoryWriteModel): Observable<any> {
     return this.http.put(this.apiUrl + '/' + id, category);
   }
 
-  hideCategory(id: number) {
+  hideCategory(id: number): Observable<any> {
     return this.http.patch(this.apiUrl + '/' + id + '/hide', id);
   }
 }

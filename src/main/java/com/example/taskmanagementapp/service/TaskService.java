@@ -13,9 +13,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 import static com.example.taskmanagementapp.dto.mapper.TaskDtoMapper.mapToTask;
+import static com.example.taskmanagementapp.dto.mapper.TaskDtoMapper.mapToTaskDto;
 import static com.example.taskmanagementapp.dto.mapper.TaskReadDtoMapper.mapToTaskReadDtoList;
 import static com.example.taskmanagementapp.dto.mapper.TaskReadDtoMapper.mapToTaskReadWithNotesDto;
 
@@ -28,10 +27,8 @@ public class TaskService {
         this.taskRepository = taskRepository;
     }
 
-    public List<TaskReadDto> getAllNotCompletedTasks(int pageNumber, int pageSize) {
-        return mapToTaskReadDtoList(
-                taskRepository.findAllNotCompletedTasks(PageRequest.of(pageNumber, pageSize))
-        );
+    public Page<TaskReadDto> getAllActiveTasks(int pageNumber, int pageSize) {
+        return taskRepository.findAllActiveTasks(PageRequest.of(pageNumber, pageSize)).map(TaskReadDtoMapper::mapToTaskReadDto);
     }
 
     public Page<TaskReadDto> getAllTasks(int pageNumber, int pageSize) {
@@ -46,17 +43,19 @@ public class TaskService {
     }
 
     @Transactional
-    public void createTask(TaskDto taskDto) {
+    public TaskDto createTask(TaskDto taskDto) {
         taskDto.setStatus(StatusEnum.NEW);
-        taskRepository.save(mapToTask(taskDto));
+        Task created = taskRepository.save(mapToTask(taskDto));
+        return mapToTaskDto(created);
     }
 
     @Transactional
-    public void updateTask(int id, TaskDto taskDto) {
+    public TaskDto updateTask(int id, TaskDto taskDto) {
         Task toUpdate = taskRepository.findById(id).orElseThrow(
                 () -> new TaskNotFoundException(id)
         );
 
-        taskRepository.save(mapToTask(taskDto, toUpdate));
+        Task updated = taskRepository.save(mapToTask(taskDto, toUpdate));
+        return mapToTaskDto(updated);
     }
 }

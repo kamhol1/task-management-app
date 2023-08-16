@@ -1,7 +1,7 @@
 <div class="mt-5 w-50">
   <form (ngSubmit)="onSubmit(form)" #form="ngForm">
-    <label for="category">New category:</label>
-    <input class="form-control" id="category" name="category" [(ngModel)]="category.name" type="text">
+    <h2 class="mb-3">New category:</h2>
+    <input class="form-control" name="category" [(ngModel)]="category.name" type="text" placeholder="Category name...">
     <button class="btn btn-primary mt-2" type="submit">
       <i class="bi bi-plus-lg mr-2"></i>Add category
     </button>

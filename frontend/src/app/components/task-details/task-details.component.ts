@@ -6,6 +6,7 @@ import {NgForm} from "@angular/forms";
 import {TaskWriteModel} from "../../models/task/task-write.model";
 import {CategoryModel} from "../../models/category/category.model";
 import {CategoryService} from "../../services/category/category.service";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-task-details',
@@ -19,7 +20,8 @@ export class TaskDetailsComponent implements OnInit {
   constructor(private taskService: TaskService,
               private categoryService: CategoryService,
               private route: ActivatedRoute,
-              private router: Router) {}
+              private router: Router,
+              private snackBar: MatSnackBar) {}
 
   ngOnInit(): void {
     this.route.paramMap.subscribe({
@@ -34,8 +36,8 @@ export class TaskDetailsComponent implements OnInit {
         next: categories => {
           this.categories = categories;
         },
-        error: error => {
-          console.log(error);
+        error: err => {
+          console.log(err);
         }
       });
   }
@@ -46,8 +48,15 @@ export class TaskDetailsComponent implements OnInit {
         next: (task: TaskDetailsModel) => {
           this.task = task;
         },
-        error: (error) => {
-          console.log(error);
+        error: (err) => {
+          this.snackBar.open(err.error.message,
+            'OK',
+            {
+              verticalPosition: 'top',
+              panelClass: ['app-notification-error'],
+              duration: 5000
+            });
+          this.goToTaskList();
         }
       });
   }
@@ -69,11 +78,23 @@ export class TaskDetailsComponent implements OnInit {
 
       this.taskService.updateTask(this.task.id, toUpdate)
         .subscribe({
-          next: response => {
-            console.log(response);
+          next: res => {
+            this.snackBar.open(res.message,
+              'OK',
+              {
+                verticalPosition: 'top',
+                panelClass: ['app-notification-success'],
+                duration: 5000
+              });
           },
-          error: error => {
-            console.log(error);
+          error: err => {
+            this.snackBar.open(err.error.message,
+              'OK',
+              {
+                verticalPosition: 'top',
+                panelClass: ['app-notification-error'],
+                duration: 5000
+              });
           }
         });
     }
