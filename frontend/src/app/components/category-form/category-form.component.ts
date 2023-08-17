@@ -1,26 +1,22 @@
 import {Component, OnInit} from '@angular/core';
 import {CategoryService} from "../../services/category/category.service";
 import {NgForm} from "@angular/forms";
-import {CategoryWriteModel} from "../../models/category/category-write.model";
 import {MatSnackBar} from "@angular/material/snack-bar";
-import {Router} from "@angular/router";
+import {CategoryModel} from "../../models/category.model";
 
 @Component({
   selector: 'app-category-form',
   templateUrl: './category-form.component.html',
   styleUrls: ['./category-form.component.css']
 })
-export class CategoryFormComponent implements OnInit {
-  category!: CategoryWriteModel;
+export class CategoryFormComponent {
+  category: CategoryModel = {
+    id: 0,
+    name: ''
+  };
 
   constructor(private categoryService: CategoryService,
               private snackBar: MatSnackBar) { }
-
-  ngOnInit(): void {
-    this.category = {
-      name: ''
-    }
-  }
 
   onSubmit(form: NgForm) {
     if (form.valid) {

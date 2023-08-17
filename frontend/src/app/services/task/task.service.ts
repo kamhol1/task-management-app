@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import {Observable} from "rxjs";
-import {TaskModel} from "../../models/task/task.model";
+import {TaskModel} from "../../models/task.model";
 import {HttpClient, HttpParams} from "@angular/common/http";
-import {TaskDetailsModel} from "../../models/task/task-details.model";
-import {TaskWriteModel} from "../../models/task/task-write.model";
+import {TaskDetailsModel} from "../../models/task-details.model";
 
 @Injectable({
   providedIn: 'root'
@@ -25,11 +24,11 @@ export class TaskService {
     return this.http.get<TaskDetailsModel>(this.apiUrl + '/' + taskId);
   }
 
-  saveTask(task: TaskWriteModel): Observable<any> {
+  saveTask(task: TaskModel): Observable<any> {
     return this.http.post(this.apiUrl, task);
   }
 
-  updateTask(taskId: number, task: TaskWriteModel): Observable<any> {
+  updateTask(taskId: number, task: TaskModel): Observable<any> {
     return this.http.put(this.apiUrl + '/' + taskId, task)
   }
 }

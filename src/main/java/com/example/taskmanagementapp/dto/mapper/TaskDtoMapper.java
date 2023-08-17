@@ -1,43 +1,59 @@
 package com.example.taskmanagementapp.dto.mapper;
 
+import com.example.taskmanagementapp.dto.TaskDetailsDto;
 import com.example.taskmanagementapp.dto.TaskDto;
 import com.example.taskmanagementapp.model.Category;
 import com.example.taskmanagementapp.model.Task;
 
 public class TaskDtoMapper {
 
-    private TaskDtoMapper() {}
-
-    public static Task mapToTask(TaskDto taskDto) {
-        return Task.builder()
-                .title(taskDto.getTitle())
-                .description(taskDto.getDescription())
-                .category(Category.builder().id(taskDto.getCategory()).build())
-                .status(taskDto.getStatus())
-                .priority(taskDto.getPriority())
-                .targetTime(taskDto.getTargetTime())
-                .build();
-    }
-
-    public static Task mapToTask(TaskDto taskDto, Task toUpdate) {
-        toUpdate.setTitle(taskDto.getTitle());
-        toUpdate.setDescription(taskDto.getDescription());
-        toUpdate.setCategory(Category.builder().id(taskDto.getCategory()).build());
-        toUpdate.setStatus(taskDto.getStatus());
-        toUpdate.setPriority(taskDto.getPriority());
-        toUpdate.setTargetTime(taskDto.getTargetTime());
-
-        return toUpdate;
+    private TaskDtoMapper() {
     }
 
     public static TaskDto mapToTaskDto(Task task) {
-        return TaskDto.builder()
-                .title(task.getTitle())
-                .description(task.getDescription())
-                .category(task.getCategory().getId())
-                .status(task.getStatus())
-                .priority(task.getPriority())
-                .targetTime(task.getTargetTime())
+        return new TaskDto(
+                task.getId(),
+                task.getTitle(),
+                task.getDescription(),
+                task.getCategory().getId(),
+                task.getStatus(),
+                task.getPriority(),
+                task.getTargetTime());
+    }
+
+    public static TaskDetailsDto mapToTaskDetailsDto(Task task) {
+        return new TaskDetailsDto(
+                task.getId(),
+                task.getTitle(),
+                task.getDescription(),
+                task.getCategory().getId(),
+                task.getCategory().getName(),
+                task.getStatus(),
+                task.getPriority(),
+                task.getTargetTime(),
+                task.getCreatedOn(),
+                NoteDtoMapper.mapToNoteDtoList(task));
+    }
+
+    public static Task mapToTaskCreate(TaskDto taskDto) {
+        return Task.builder()
+                .title(taskDto.title())
+                .description(taskDto.description())
+                .category(Category.builder().id(taskDto.category()).build())
+                .status(taskDto.status())
+                .priority(taskDto.priority())
+                .targetTime(taskDto.targetTime())
                 .build();
+    }
+
+    public static Task mapToTaskUpdate(TaskDto taskDto, Task toUpdate) {
+        toUpdate.setTitle(taskDto.title());
+        toUpdate.setDescription(taskDto.description());
+        toUpdate.setCategory(Category.builder().id(taskDto.category()).build());
+        toUpdate.setStatus(taskDto.status());
+        toUpdate.setPriority(taskDto.priority());
+        toUpdate.setTargetTime(taskDto.targetTime());
+
+        return toUpdate;
     }
 }

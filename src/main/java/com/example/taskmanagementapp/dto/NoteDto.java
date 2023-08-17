@@ -1,11 +1,11 @@
 package com.example.taskmanagementapp.dto;
 
-import lombok.Builder;
-import lombok.Getter;
+import java.time.LocalDateTime;
 
-@Getter
-@Builder
-public class NoteDto {
-    private String content;
-    private int task;
+public record NoteDto(
+        int id,
+        String content,
+        int task,
+        LocalDateTime createdOn
+) {
 }

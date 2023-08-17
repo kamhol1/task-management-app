@@ -1,8 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {CategoryModel} from "../../models/category/category.model";
-import {CategoryWriteModel} from "../../models/category/category-write.model";
+import {CategoryModel} from "../../models/category.model";
 
 @Injectable({
   providedIn: 'root'
@@ -13,19 +12,19 @@ export class CategoryService {
 
   constructor(private http: HttpClient) { }
 
-  getCategories(): Observable<CategoryModel[]> {
-    return this.http.get<CategoryModel[]>(this.apiUrl);
+  getNotHiddenCategories(): Observable<CategoryModel[]> {
+    return this.http.get<CategoryModel[]>(this.apiUrl + '/active');
   }
 
-  saveCategory(category: CategoryWriteModel): Observable<any> {
+  saveCategory(category: CategoryModel): Observable<any> {
     return this.http.post(this.apiUrl, category);
   }
 
-  updateCategory(id: number, category: CategoryWriteModel): Observable<any> {
-    return this.http.put(this.apiUrl + '/' + id, category);
+  updateCategory(category: CategoryModel): Observable<any> {
+    return this.http.put(this.apiUrl + '/' + category.id, category);
   }
 
-  hideCategory(id: number): Observable<any> {
-    return this.http.patch(this.apiUrl + '/' + id + '/hide', id);
+  hideCategory(category: CategoryModel): Observable<any> {
+    return this.http.patch(this.apiUrl + '/' + category.id + '/hide', category.id);
   }
 }

@@ -1,8 +1,7 @@
 import {Component, Input} from '@angular/core';
-import {NoteReadModel} from "../../models/note/note-read.model";
+import {NoteModel} from "../../models/note.model";
 import {NgForm} from "@angular/forms";
 import {NoteService} from "../../services/note/note.service";
-import {numbers} from "@material/snackbar";
 
 @Component({
   selector: 'app-note-list',
@@ -11,9 +10,14 @@ import {numbers} from "@material/snackbar";
 })
 export class NoteListComponent {
   @Input()
-  notes: NoteReadModel[] = [];
+  notes: NoteModel[] = [];
   editMode: boolean = false;
-  note!: NoteReadModel;
+  note: NoteModel = {
+    id: 0,
+    content: '',
+    task: 0,
+    createdOn: ''
+  };
 
   constructor(private noteService: NoteService) { }
 

@@ -1,7 +1,6 @@
 package com.example.taskmanagementapp.service;
 
-import com.example.taskmanagementapp.dto.TaskReadDto;
-import com.example.taskmanagementapp.dto.TaskReadWithNotesDto;
+import com.example.taskmanagementapp.dto.TaskDetailsDto;
 import com.example.taskmanagementapp.exception.TaskNotFoundException;
 import com.example.taskmanagementapp.model.*;
 import com.example.taskmanagementapp.repository.TaskRepository;
@@ -10,9 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.PageRequest;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -88,7 +85,7 @@ class TaskServiceTest {
 
         // When
         when(taskRepository.findById(taskId)).thenReturn(Optional.of(existingTask));
-        TaskReadWithNotesDto result = taskService.getTask(taskId);
+        TaskDetailsDto result = taskService.getTask(taskId);
 
         // Then
         assertNotNull(result);

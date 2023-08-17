@@ -1,20 +1,17 @@
 package com.example.taskmanagementapp.dto;
 
-import com.example.taskmanagementapp.model.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import com.example.taskmanagementapp.model.PriorityEnum;
+import com.example.taskmanagementapp.model.StatusEnum;
 
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
-@Builder
-public class TaskDto {
-    private String title;
-    private String description;
-    private int category;
-    private StatusEnum status;
-    private PriorityEnum priority;
-    private LocalDateTime targetTime;
+public record TaskDto(
+        int id,
+        String title,
+        String description,
+        int category,
+        StatusEnum status,
+        PriorityEnum priority,
+        LocalDateTime targetTime
+) {
 }

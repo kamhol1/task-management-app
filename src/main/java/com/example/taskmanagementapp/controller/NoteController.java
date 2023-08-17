@@ -1,7 +1,6 @@
 package com.example.taskmanagementapp.controller;
 
 import com.example.taskmanagementapp.dto.NoteDto;
-import com.example.taskmanagementapp.dto.NoteReadDto;
 import com.example.taskmanagementapp.service.NoteService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +17,7 @@ public class NoteController {
     }
 
     @GetMapping("/{id}")
-    ResponseEntity<NoteReadDto> getNote(@PathVariable int id) {
+    ResponseEntity<NoteDto> getNote(@PathVariable int id) {
         return ResponseEntity.ok(noteService.getNote(id));
     }
 
@@ -29,8 +28,8 @@ public class NoteController {
     }
 
     @PutMapping("/{id}")
-    ResponseEntity<MessageResponse> updateNote(@PathVariable int id, @RequestBody NoteReadDto noteReadDto) {
-        noteService.updateNote(id, noteReadDto);
+    ResponseEntity<MessageResponse> updateNote(@PathVariable int id, @RequestBody NoteDto noteDto) {
+        noteService.updateNote(id, noteDto);
         return ResponseEntity.ok(new MessageResponse("Note updated successfully"));
     }
 }

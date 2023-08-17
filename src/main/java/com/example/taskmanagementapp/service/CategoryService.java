@@ -1,7 +1,7 @@
 package com.example.taskmanagementapp.service;
 
 import com.example.taskmanagementapp.dto.CategoryDto;
-import com.example.taskmanagementapp.dto.CategoryReadDto;
+import com.example.taskmanagementapp.dto.mapper.CategoryDtoMapper;
 import com.example.taskmanagementapp.exception.CategoryNotFoundException;
 import com.example.taskmanagementapp.model.Category;
 import com.example.taskmanagementapp.repository.CategoryRepository;
@@ -21,38 +21,42 @@ public class CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
-    public List<CategoryReadDto> getAllCategories() {
-        return mapToCategoryReadDtoList(categoryRepository.findAll());
-    }
+//    public List<CategoryDto> getAllCategories() {
+//        return categoryRepository.findAll().stream()
+//                .map(CategoryDtoMapper::mapToCategoryDto)
+//                .toList();
+//    }
 
-    public List<CategoryReadDto> getNotHiddenCategories() {
-        return mapToCategoryReadDtoList(categoryRepository.findAllByHiddenIsFalse());
+    public List<CategoryDto> getNotHiddenCategories() {
+        return categoryRepository.findAllByHiddenIsFalse().stream()
+                .map(CategoryDtoMapper::mapToCategoryDto)
+                .toList();
     }
 
     @Transactional
-    public CategoryReadDto createCategory(CategoryDto categoryDto) {
-        Category created = categoryRepository.save(mapToCategory(categoryDto));
-        return mapToCategoryReadDto(created);
+    public CategoryDto createCategory(CategoryDto categoryDto) {
+        Category created = categoryRepository.save(mapToCategoryCreate(categoryDto));
+        return mapToCategoryDto(created);
     }
 
     @Transactional
-    public CategoryReadDto updateCategory(int id, CategoryDto categoryDto) {
+    public CategoryDto updateCategory(int id, CategoryDto categoryDto) {
         Category toUpdate = categoryRepository.findById(id).orElseThrow(
                 () -> new CategoryNotFoundException(id)
         );
 
-        Category updated = categoryRepository.save(mapToCategory(categoryDto, toUpdate));
-        return mapToCategoryReadDto(updated);
+        Category updated = categoryRepository.save(mapToCategoryUpdate(categoryDto, toUpdate));
+        return mapToCategoryDto(updated);
     }
 
     @Transactional
-    public CategoryReadDto hideCategory(int id) {
+    public CategoryDto hideCategory(int id) {
         Category category = categoryRepository.findById(id).orElseThrow(
                 () -> new CategoryNotFoundException(id)
         );
 
         category.setHidden(true);
         Category updated = categoryRepository.save(category);
-        return mapToCategoryReadDto(updated);
+        return mapToCategoryDto(updated);
     }
 }

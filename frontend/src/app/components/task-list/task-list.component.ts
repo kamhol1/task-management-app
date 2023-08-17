@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {TaskModel} from "../../models/task/task.model";
+import {TaskModel} from "../../models/task.model";
 import {TaskService} from "../../services/task/task.service";
 import {Router} from "@angular/router";
 
@@ -11,7 +11,7 @@ import {Router} from "@angular/router";
 export class TaskListComponent implements OnInit {
   tasks: TaskModel[] = [];
   page: number = 0;
-  size = 10;
+  size: number = 10;
   totalPages!: number;
   totalElements!: number;
   numberOfElements!: number;

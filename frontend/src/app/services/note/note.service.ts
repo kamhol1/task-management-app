@@ -1,7 +1,6 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {NoteReadModel} from "../../models/note/note-read.model";
-import {NoteWriteModel} from "../../models/note/note-write.model";
+import {NoteModel} from "../../models/note.model";
 import {Observable} from "rxjs";
 
 @Injectable({
@@ -17,11 +16,11 @@ export class NoteService {
     return this.http.get(this.apiUrl + '/' + id);
   }
 
-  saveNote(note: NoteWriteModel): Observable<NoteWriteModel> {
-    return this.http.post<NoteWriteModel>(this.apiUrl, note);
+  saveNote(note: NoteModel): Observable<NoteModel> {
+    return this.http.post<NoteModel>(this.apiUrl, note);
   }
 
-  updateNote(id: number, note: NoteReadModel) {
+  updateNote(id: number, note: NoteModel) {
     return this.http.put(this.apiUrl + '/' + id, note);
   }
 }

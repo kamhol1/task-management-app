@@ -2,38 +2,28 @@ package com.example.taskmanagementapp.dto.mapper;
 
 
 import com.example.taskmanagementapp.dto.CategoryDto;
-import com.example.taskmanagementapp.dto.CategoryReadDto;
 import com.example.taskmanagementapp.model.Category;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class CategoryDtoMapper {
 
-    private CategoryDtoMapper() {}
-
-    public static List<CategoryReadDto> mapToCategoryReadDtoList(List<Category> categories) {
-        return categories.stream()
-                .map(CategoryDtoMapper::mapToCategoryReadDto)
-                .collect(Collectors.toList());
+    private CategoryDtoMapper() {
     }
 
-    public static CategoryReadDto mapToCategoryReadDto(Category category) {
-        return CategoryReadDto.builder()
-                .id(category.getId())
-                .name(category.getName())
-                .build();
+    public static CategoryDto mapToCategoryDto(Category category) {
+        return new CategoryDto(
+                category.getId(),
+                category.getName()
+        );
     }
 
-    public static Category mapToCategory(CategoryDto dto) {
+    public static Category mapToCategoryCreate(CategoryDto dto) {
         return Category.builder()
-                .name(dto.getName())
+                .name(dto.name())
                 .build();
     }
 
-    public static Category mapToCategory(CategoryDto dto, Category toUpdate) {
-        toUpdate.setName(dto.getName());
+    public static Category mapToCategoryUpdate(CategoryDto dto, Category toUpdate) {
+        toUpdate.setName(dto.name());
         return toUpdate;
     }
-
 }

@@ -1,8 +1,7 @@
 package com.example.taskmanagementapp.controller;
 
+import com.example.taskmanagementapp.dto.TaskDetailsDto;
 import com.example.taskmanagementapp.dto.TaskDto;
-import com.example.taskmanagementapp.dto.TaskReadDto;
-import com.example.taskmanagementapp.dto.TaskReadWithNotesDto;
 import com.example.taskmanagementapp.service.TaskService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -21,7 +20,7 @@ public class TaskController {
     }
 
     @GetMapping("/active")
-    ResponseEntity<Page<TaskReadDto>> getAllActiveTasks(@RequestParam(required = false) Integer page,
+    ResponseEntity<Page<TaskDto>> getAllActiveTasks(@RequestParam(required = false) Integer page,
                                         @RequestParam(required = false) Integer size) {
         int pageNumber = page != null && page >= 0 ? page : 0;
         int pageSize = size != null && size >= 0 ? size : 10;
@@ -30,7 +29,7 @@ public class TaskController {
     }
 
     @GetMapping("")
-    ResponseEntity<Page<TaskReadDto>> getAllTasks(@RequestParam(required = false) Integer page,
+    ResponseEntity<Page<TaskDto>> getAllTasks(@RequestParam(required = false) Integer page,
                                   @RequestParam(required = false) Integer size) {
         int pageNumber = page != null && page >= 0 ? page : 0;
         int pageSize = size != null && size >= 0 ? size : 10;
@@ -39,7 +38,7 @@ public class TaskController {
     }
 
     @GetMapping("/{id}")
-    ResponseEntity<TaskReadWithNotesDto> getTask(@PathVariable int id) {
+    ResponseEntity<TaskDetailsDto> getTask(@PathVariable int id) {
         return ResponseEntity.ok(
                 taskService.getTask(id));
     }

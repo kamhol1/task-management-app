@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {CategoryModel} from "../../models/category/category.model";
+import {CategoryModel} from "../../models/category.model";
 import {CategoryService} from "../../services/category/category.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {Router} from "@angular/router";
@@ -21,7 +21,7 @@ export class CategoryListComponent implements OnInit {
   }
 
   private getCategories() {
-    this.categoryService.getCategories()
+    this.categoryService.getNotHiddenCategories()
       .subscribe({
         next: categories => {
           this.categories = categories;
@@ -32,8 +32,8 @@ export class CategoryListComponent implements OnInit {
       });
   }
 
-  updateCategory(id: number, category: CategoryModel) {
-    this.categoryService.updateCategory(id, category)
+  updateCategory(category: CategoryModel) {
+    this.categoryService.updateCategory(category)
       .subscribe({
         next: res => {
           this.snackBar.open(res.message,
@@ -43,7 +43,9 @@ export class CategoryListComponent implements OnInit {
               panelClass: ['app-notification-success'],
               duration: 5000
             });
-          location.reload();
+          this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+          this.router.onSameUrlNavigation = 'reload';
+          this.router.navigate(['./categories'])
         },
         error: err => {
           this.snackBar.open(err.error.message,
@@ -57,11 +59,11 @@ export class CategoryListComponent implements OnInit {
       })
   }
 
-  hideCategory(id: number, name: string) {
-    const confirmDelete = confirm('Are you sure you want to delete "' + name + '" category?');
+  hideCategory(category: CategoryModel) {
+    const confirmDelete = confirm('Are you sure you want to delete "' + category.name + '" category?');
 
     if (confirmDelete) {
-      this.categoryService.hideCategory(id)
+      this.categoryService.hideCategory(category)
         .subscribe({
           next: res => {
             this.snackBar.open(res.message,

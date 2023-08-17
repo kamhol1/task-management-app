@@ -1,12 +1,12 @@
 import {Component, OnInit} from '@angular/core';
-import {TaskDetailsModel} from "../../models/task/task-details.model";
+import {TaskDetailsModel} from "../../models/task-details.model";
 import {ActivatedRoute, ParamMap, Router} from "@angular/router";
 import {TaskService} from "../../services/task/task.service";
 import {NgForm} from "@angular/forms";
-import {TaskWriteModel} from "../../models/task/task-write.model";
-import {CategoryModel} from "../../models/category/category.model";
+import {CategoryModel} from "../../models/category.model";
 import {CategoryService} from "../../services/category/category.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {TaskModel} from "../../models/task.model";
 
 @Component({
   selector: 'app-task-details',
@@ -14,7 +14,18 @@ import {MatSnackBar} from "@angular/material/snack-bar";
   styleUrls: ['./task-details.component.css']
 })
 export class TaskDetailsComponent implements OnInit {
-  task!: TaskDetailsModel;
+  task: TaskDetailsModel = {
+    id: 0,
+    title: '',
+    description: '',
+    categoryId: 0,
+    categoryName: '',
+    status: '',
+    priority: '',
+    targetTime: '',
+    createdOn: '',
+    notes: []
+  };
   categories: CategoryModel[] = [];
 
   constructor(private taskService: TaskService,
@@ -31,7 +42,7 @@ export class TaskDetailsComponent implements OnInit {
       }
     });
 
-    this.categoryService.getCategories()
+    this.categoryService.getNotHiddenCategories()
       .subscribe({
         next: categories => {
           this.categories = categories;
@@ -67,7 +78,8 @@ export class TaskDetailsComponent implements OnInit {
 
   onSubmit(form: NgForm) {
     if (form.valid) {
-      const toUpdate: TaskWriteModel = {
+      const toUpdate: TaskModel = {
+        id: this.task.id,
         title: this.task.title,
         description: this.task.description,
         category: this.task.categoryId,

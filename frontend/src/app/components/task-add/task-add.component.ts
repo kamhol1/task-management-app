@@ -1,11 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {TaskService} from "../../services/task/task.service";
-import {TaskWriteModel} from "../../models/task/task-write.model";
 import {NgForm} from "@angular/forms";
 import {Router} from "@angular/router";
 import {CategoryService} from "../../services/category/category.service";
-import {CategoryModel} from "../../models/category/category.model";
+import {CategoryModel} from "../../models/category.model";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {TaskModel} from "../../models/task.model";
 
 @Component({
   selector: 'app-task-add',
@@ -13,7 +13,7 @@ import {MatSnackBar} from "@angular/material/snack-bar";
   styleUrls: ['./task-add.component.css']
 })
 export class TaskAddComponent implements OnInit {
-  task!: TaskWriteModel;
+  task!: TaskModel;
   categories: CategoryModel[] = [];
 
   constructor(private taskService: TaskService,
@@ -23,15 +23,16 @@ export class TaskAddComponent implements OnInit {
 
   ngOnInit(): void {
     this.task = {
-      title: "",
-      description: "",
+      id: 0,
+      title: '',
+      description: '',
       category: 0,
-      status: "NEW",
-      priority: "",
-      targetTime: ""
+      status: 'NEW',
+      priority: '',
+      targetTime: ''
     };
 
-    this.categoryService.getCategories()
+    this.categoryService.getNotHiddenCategories()
       .subscribe({
         next: categories => {
           this.categories = categories;

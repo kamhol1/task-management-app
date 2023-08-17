@@ -1,15 +1,13 @@
 package com.example.taskmanagementapp.service;
 
 import com.example.taskmanagementapp.dto.NoteDto;
-import com.example.taskmanagementapp.dto.NoteReadDto;
 import com.example.taskmanagementapp.model.Note;
 import com.example.taskmanagementapp.repository.NoteRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
-import static com.example.taskmanagementapp.dto.mapper.NoteDtoMapper.mapToNote;
-import static com.example.taskmanagementapp.dto.mapper.NoteDtoMapper.mapToNoteReadDto;
+import static com.example.taskmanagementapp.dto.mapper.NoteDtoMapper.*;
 
 @Service
 public class NoteService {
@@ -20,24 +18,24 @@ public class NoteService {
         this.noteRepository = noteRepository;
     }
 
-    public NoteReadDto getNote(int id) {
-        return mapToNoteReadDto(noteRepository.findById(id).orElseThrow(
+    public NoteDto getNote(int id) {
+        return mapToNoteDto(noteRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Note not found")
         ));
     }
 
     @Transactional
     public void createNote(NoteDto noteDto) {
-        noteRepository.save(mapToNote(noteDto));
+        noteRepository.save(mapToNoteCreate(noteDto));
     }
 
     @Transactional
-    public NoteReadDto updateNote(int id, NoteReadDto noteReadDto) {
+    public NoteDto updateNote(int id, NoteDto noteDto) {
         Note toUpdate = noteRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Note not found")
         );
 
-        Note updated = noteRepository.save(mapToNote(noteReadDto, toUpdate));
-        return mapToNoteReadDto(updated);
+        Note updated = noteRepository.save(mapToNoteUpdate(noteDto, toUpdate));
+        return mapToNoteDto(updated);
     }
 }

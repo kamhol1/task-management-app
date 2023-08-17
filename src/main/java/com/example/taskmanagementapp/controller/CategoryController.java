@@ -1,7 +1,6 @@
 package com.example.taskmanagementapp.controller;
 
 import com.example.taskmanagementapp.dto.CategoryDto;
-import com.example.taskmanagementapp.dto.CategoryReadDto;
 import com.example.taskmanagementapp.service.CategoryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,27 +19,27 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
-    @GetMapping("")
-    ResponseEntity<List<CategoryReadDto>> getNotHiddenCategories() {
+    @GetMapping("/active")
+    ResponseEntity<List<CategoryDto>> getNotHiddenCategories() {
         return ResponseEntity.ok(
                 categoryService.getNotHiddenCategories());
     }
 
     @PostMapping("")
     ResponseEntity<MessageResponse> createCategory(@RequestBody CategoryDto categoryDto) {
-        CategoryReadDto created = categoryService.createCategory(categoryDto);
-        return new ResponseEntity<>(new MessageResponse("Category \"" + created.getName() + "\" created successfully"), HttpStatus.CREATED);
+        CategoryDto created = categoryService.createCategory(categoryDto);
+        return new ResponseEntity<>(new MessageResponse("Category \"" + created.name() + "\" created successfully"), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
     ResponseEntity<MessageResponse> updateCategory(@PathVariable int id, @RequestBody CategoryDto categoryDto) {
-        CategoryReadDto updated = categoryService.updateCategory(id, categoryDto);
-        return ResponseEntity.ok(new MessageResponse("Category with id " + updated.getId() + " has been updated successfully"));
+        CategoryDto updated = categoryService.updateCategory(id, categoryDto);
+        return ResponseEntity.ok(new MessageResponse("Category with id " + updated.id() + " has been updated successfully"));
     }
 
     @PatchMapping("/{id}/hide")
     ResponseEntity<MessageResponse> hideCategory(@PathVariable int id) {
-        CategoryReadDto updated = categoryService.hideCategory(id);
-        return ResponseEntity.ok(new MessageResponse("Category with id " + updated.getId() + " has been deleted"));
+        CategoryDto updated = categoryService.hideCategory(id);
+        return ResponseEntity.ok(new MessageResponse("Category with id " + updated.id() + " has been deleted"));
     }
 }

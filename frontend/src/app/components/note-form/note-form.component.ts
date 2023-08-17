@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {NgForm} from "@angular/forms";
 import {NoteService} from "../../services/note/note.service";
-import {NoteWriteModel} from "../../models/note/note-write.model";
-import {ActivatedRoute, ParamMap, Router} from "@angular/router";
+import {ActivatedRoute, ParamMap} from "@angular/router";
+import {NoteModel} from "../../models/note.model";
 
 @Component({
   selector: 'app-note-form',
@@ -10,9 +10,11 @@ import {ActivatedRoute, ParamMap, Router} from "@angular/router";
   styleUrls: ['./note-form.component.css']
 })
 export class NoteFormComponent implements OnInit {
-  note: NoteWriteModel = {
+  note: NoteModel = {
+    id: 0,
     content: '',
-    task: 0
+    task: 0,
+    createdOn: ''
   };
 
   constructor(private noteService: NoteService,
