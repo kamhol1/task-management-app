@@ -8,6 +8,7 @@
             'bi-caret-down-fill' : this.sortOrder == 'desc' && this.sortField == 'id',
             'bi-caret-right-fill' : this.sortField != 'id'}"></i>
         </button> <br/>
+        <input type="number" [(ngModel)]="idFilter" name="idFilter" (input)="filterTasks()" placeholder="Id...">
       </th>
       <th>Title
         <button class="btn btn-dark border-0" (click)="sortData('title')">
@@ -15,6 +16,7 @@
             'bi-caret-down-fill' : this.sortOrder == 'desc' && this.sortField == 'title',
             'bi-caret-right-fill' : this.sortField != 'title'}"></i>
         </button> <br/>
+        <input type="text" [(ngModel)]="titleFilter" name="titleFilter" (input)="filterTasks()" placeholder="Title...">
       </th>
       <th>Status
         <button class="btn btn-dark border-0" (click)="sortData('status')">
@@ -22,6 +24,7 @@
             'bi-caret-down-fill' : this.sortOrder == 'desc' && this.sortField == 'status',
             'bi-caret-right-fill' : this.sortField != 'status'}"></i>
         </button> <br/>
+        <input type="text" [(ngModel)]="statusFilter" name="statusFilter" (input)="filterTasks()" placeholder="Status...">
       </th>
       <th>Priority
         <button class="btn btn-dark border-0" (click)="sortData('priority')">
@@ -29,6 +32,7 @@
             'bi-caret-down-fill' : this.sortOrder == 'desc' && this.sortField == 'priority',
             'bi-caret-right-fill' : this.sortField != 'priority'}"></i>
         </button> <br/>
+        <input type="text" [(ngModel)]="priorityFilter" name="priorityFilter" (input)="filterTasks()" placeholder="Priority...">
       </th>
       <th>Target time
         <button class="btn btn-dark border-0" (click)="sortData('targetTime')">

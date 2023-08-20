@@ -7,11 +7,16 @@ import com.example.taskmanagementapp.exception.TaskNotFoundException;
 import com.example.taskmanagementapp.model.StatusEnum;
 import com.example.taskmanagementapp.model.Task;
 import com.example.taskmanagementapp.repository.TaskRepository;
+import com.example.taskmanagementapp.specification.SearchCriteria;
+import com.example.taskmanagementapp.specification.TaskSpecification;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
+import java.util.Optional;
 
 import static com.example.taskmanagementapp.dto.mapper.TaskDtoMapper.mapToTaskDetailsDto;
 import static com.example.taskmanagementapp.dto.mapper.TaskDtoMapper.mapToTaskDto;
@@ -25,18 +30,20 @@ public class TaskService {
         this.taskRepository = taskRepository;
     }
 
-    public Page<TaskDto> getAllActiveTasks(int pageNumber, int pageSize, String sortField, String sortOrder) {
+    public Page<TaskDto> getAllActiveTasks(Integer idFilter, String titleFilter, String statusFilter, String priorityFilter, int pageNumber, int pageSize, String sortField, String sortOrder) {
         Sort sort = Sort.by(sortOrder.equals("desc") ? Sort.Direction.DESC : Sort.Direction.ASC, sortField);
         PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sort);
+        TaskSpecification spec = filter(idFilter, titleFilter, statusFilter, priorityFilter, Optional.ofNullable(idFilter).isEmpty() && statusFilter.isEmpty());
 
-        return taskRepository.findAllActiveTasks(pageRequest).map(TaskDtoMapper::mapToTaskDto);
+        return taskRepository.findAll(spec, pageRequest).map(TaskDtoMapper::mapToTaskDto);
     }
 
-    public Page<TaskDto> getAllTasks(int pageNumber, int pageSize, String sortField, String sortOrder) {
+    public Page<TaskDto> getAllTasks(Integer idFilter, String titleFilter, String statusFilter, String priorityFilter, int pageNumber, int pageSize, String sortField, String sortOrder) {
         Sort sort = Sort.by(sortOrder.equals("desc") ? Sort.Direction.DESC : Sort.Direction.ASC, sortField);
         PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sort);
+        TaskSpecification spec = filter(idFilter, titleFilter, statusFilter, priorityFilter, false);
 
-        return taskRepository.findAll(pageRequest).map(TaskDtoMapper::mapToTaskDto);
+        return taskRepository.findAll(spec, pageRequest).map(TaskDtoMapper::mapToTaskDto);
     }
 
     public TaskDetailsDto getTask(int id) {
@@ -62,5 +69,26 @@ public class TaskService {
 
         Task updated = taskRepository.save(TaskDtoMapper.mapToTaskUpdate(taskDto, toUpdate));
         return mapToTaskDto(updated);
+    }
+
+    private TaskSpecification filter(Integer idFilter, String titleFilter, String statusFilter, String priorityFilter, boolean excludeCompletedAndCancelled) {
+        TaskSpecification spec = new TaskSpecification();
+
+        spec.add(new SearchCriteria("excludeCompletedAndCancelled", excludeCompletedAndCancelled));
+
+        if (idFilter != null) {
+            spec.add(new SearchCriteria("id", idFilter));
+        }
+        if (titleFilter != null) {
+            spec.add(new SearchCriteria("title", titleFilter));
+        }
+        if (statusFilter != null) {
+            spec.add(new SearchCriteria("status", statusFilter));
+        }
+        if (priorityFilter != null) {
+            spec.add(new SearchCriteria("priority", priorityFilter));
+        }
+
+        return spec;
     }
 }

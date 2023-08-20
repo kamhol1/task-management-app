@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {TaskModel} from "../../models/task.model";
 import {TaskService} from "../../services/task/task.service";
 import {Router} from "@angular/router";
+import {debounceTime, distinctUntilChanged, Subject} from "rxjs";
+import {TaskFilters} from "../../models/task.filters";
 
 @Component({
   selector: 'app-task-list',
@@ -18,41 +20,105 @@ export class TaskListComponent implements OnInit {
   offset!: number;
   sortField = "id";
   sortOrder = "desc";
+  idFilter = "";
+  titleFilter = "";
+  statusFilter = "";
+  priorityFilter = "";
+  searchTerms = new Subject<string>();
 
   constructor(private taskService: TaskService,
-              private router: Router) {}
-
-  ngOnInit(): void {
-    this.getTasks(this.page, this.size, this.sortField, this.sortOrder);
+              private router: Router) {
   }
 
-  getTasks(page: number, size: number, sortField: string, sortOrder: string) {
-    this.taskService.getTasks(page, size, sortField, sortOrder)
-      .subscribe({
-      next: (data) => {
-        this.tasks = data.content;
-        this.totalPages = data.totalPages;
-        this.totalElements = data.totalElements;
-        this.numberOfElements = data.numberOfElements;
-        this.offset = data.pageable.offset;
+  ngOnInit(): void {
+    this.searchTerms.pipe(
+      debounceTime(300),
+      distinctUntilChanged()
+    ).subscribe({
+      next: (filters: string) => {
+        const parsedFilters: TaskFilters = JSON.parse(filters);
+        this.getTasks(
+          this.page,
+          this.size,
+          this.sortField,
+          this.sortOrder,
+          parsedFilters.idFilter,
+          parsedFilters.titleFilter,
+          parsedFilters.statusFilter,
+          parsedFilters.priorityFilter
+        );
       },
-      error: (error) => {
-        console.log(error);
+      error: err => {
+        console.log(err);
       }
     });
+
+    this.getTasks(
+      this.page,
+      this.size,
+      this.sortField,
+      this.sortOrder,
+      this.idFilter,
+      this.titleFilter,
+      this.statusFilter,
+      this.priorityFilter
+    );
+  }
+
+  getTasks(
+    page: number,
+    size: number,
+    sortField: string,
+    sortOrder: string,
+    idFilter?: string,
+    titleFilter?: string,
+    statusFilter?: string,
+    priorityFilter?: string
+  ) {
+    this.taskService.getTasks(page, size, sortField, sortOrder, idFilter, titleFilter, statusFilter, priorityFilter)
+      .subscribe({
+        next: (data) => {
+          this.tasks = data.content;
+          this.totalPages = data.totalPages;
+          this.totalElements = data.totalElements;
+          this.numberOfElements = data.numberOfElements;
+          this.offset = data.pageable.offset;
+        },
+        error: (error) => {
+          console.log(error);
+        }
+      });
   }
 
   previousPage() {
     if (this.page > 0) {
       this.page--;
-      this.getTasks(this.page, this.size, this.sortField, this.sortOrder);
+      this.getTasks(
+        this.page,
+        this.size,
+        this.sortField,
+        this.sortOrder,
+        this.idFilter,
+        this.titleFilter,
+        this.statusFilter,
+        this.priorityFilter
+      );
     }
   }
 
   nextPage() {
     if (this.page < this.totalPages - 1) {
       this.page++;
-      this.getTasks(this.page, this.size, this.sortField, this.sortOrder);
+      this.getTasks(
+        this.page,
+        this.size,
+        this.sortField,
+        this.sortOrder,
+        this.idFilter,
+        this.titleFilter,
+        this.statusFilter,
+        this.priorityFilter
+      );
     }
   }
 
@@ -63,6 +129,26 @@ export class TaskListComponent implements OnInit {
   sortData(sortField: string) {
     this.sortOrder == 'asc' && this.sortField == sortField ? this.sortOrder = 'desc' : this.sortOrder = 'asc';
     this.sortField = sortField;
-    this.getTasks(this.page, this.size, this.sortField, this.sortOrder);
+    this.getTasks(
+      this.page,
+      this.size,
+      this.sortField,
+      this.sortOrder,
+      this.idFilter,
+      this.titleFilter,
+      this.statusFilter,
+      this.priorityFilter
+    );
+  }
+
+  filterTasks() {
+    const filters: TaskFilters = {
+      idFilter: this.idFilter,
+      titleFilter: this.titleFilter,
+      statusFilter: this.statusFilter,
+      priorityFilter: this.priorityFilter
+    };
+
+    this.searchTerms.next(JSON.stringify(filters));
   }
 }

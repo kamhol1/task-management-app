@@ -13,12 +13,25 @@ export class TaskService {
 
   constructor(private http: HttpClient) { }
 
-  getTasks(page: number, size: number, sortField: string, sortOrder: string): Observable<any> {
+  getTasks(
+    page: number,
+    size: number,
+    sortField: string,
+    sortOrder: string,
+    idFilter?: string,
+    titleFilter?: string,
+    statusFilter?: string,
+    priorityFilter?: string
+  ): Observable<any> {
     let params = new HttpParams()
       .set('page', page)
       .set('size', size)
       .set('sortField', sortField)
       .set('sortOrder', sortOrder)
+      .set('id', idFilter || '')
+      .set('title', titleFilter || '')
+      .set('status', statusFilter || '')
+      .set('priority', priorityFilter || '')
 
     return this.http.get<TaskModel[]>(this.apiUrl + '/active', { params });
   }
