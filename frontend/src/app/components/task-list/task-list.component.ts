@@ -16,17 +16,18 @@ export class TaskListComponent implements OnInit {
   totalElements!: number;
   numberOfElements!: number;
   offset!: number;
-
+  sortField = "id";
+  sortOrder = "desc";
 
   constructor(private taskService: TaskService,
               private router: Router) {}
 
   ngOnInit(): void {
-    this.getTasks(this.page);
+    this.getTasks(this.page, this.size, this.sortField, this.sortOrder);
   }
 
-  getTasks(page: number) {
-    this.taskService.getTasks(page)
+  getTasks(page: number, size: number, sortField: string, sortOrder: string) {
+    this.taskService.getTasks(page, size, sortField, sortOrder)
       .subscribe({
       next: (data) => {
         this.tasks = data.content;
@@ -44,18 +45,24 @@ export class TaskListComponent implements OnInit {
   previousPage() {
     if (this.page > 0) {
       this.page--;
-      this.getTasks(this.page);
+      this.getTasks(this.page, this.size, this.sortField, this.sortOrder);
     }
   }
 
   nextPage() {
     if (this.page < this.totalPages - 1) {
       this.page++;
-      this.getTasks(this.page);
+      this.getTasks(this.page, this.size, this.sortField, this.sortOrder);
     }
   }
 
   goToTask(taskId: number) {
     this.router.navigate(['task', taskId])
+  }
+
+  sortData(sortField: string) {
+    this.sortOrder == 'asc' && this.sortField == sortField ? this.sortOrder = 'desc' : this.sortOrder = 'asc';
+    this.sortField = sortField;
+    this.getTasks(this.page, this.size, this.sortField, this.sortOrder);
   }
 }

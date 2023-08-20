@@ -2,11 +2,41 @@
   <table class="table m-auto">
     <thead class="table-dark">
     <tr>
-      <th>Id</th>
-      <th>Title</th>
-      <th>Status</th>
-      <th>Priority</th>
-      <th>Target time</th>
+      <th>Id
+        <button class="btn btn-dark border-0" (click)="sortData('id')">
+          <i [ngClass]="{'bi-caret-up-fill' : this.sortOrder == 'asc' && this.sortField == 'id',
+            'bi-caret-down-fill' : this.sortOrder == 'desc' && this.sortField == 'id',
+            'bi-caret-right-fill' : this.sortField != 'id'}"></i>
+        </button> <br/>
+      </th>
+      <th>Title
+        <button class="btn btn-dark border-0" (click)="sortData('title')">
+          <i [ngClass]="{'bi-caret-up-fill' : this.sortOrder == 'asc' && this.sortField == 'title',
+            'bi-caret-down-fill' : this.sortOrder == 'desc' && this.sortField == 'title',
+            'bi-caret-right-fill' : this.sortField != 'title'}"></i>
+        </button> <br/>
+      </th>
+      <th>Status
+        <button class="btn btn-dark border-0" (click)="sortData('status')">
+          <i [ngClass]="{'bi-caret-up-fill' : this.sortOrder == 'asc' && this.sortField == 'status',
+            'bi-caret-down-fill' : this.sortOrder == 'desc' && this.sortField == 'status',
+            'bi-caret-right-fill' : this.sortField != 'status'}"></i>
+        </button> <br/>
+      </th>
+      <th>Priority
+        <button class="btn btn-dark border-0" (click)="sortData('priority')">
+          <i [ngClass]="{'bi-caret-up-fill' : this.sortOrder == 'asc' && this.sortField == 'priority',
+            'bi-caret-down-fill' : this.sortOrder == 'desc' && this.sortField == 'priority',
+            'bi-caret-right-fill' : this.sortField != 'priority'}"></i>
+        </button> <br/>
+      </th>
+      <th>Target time
+        <button class="btn btn-dark border-0" (click)="sortData('targetTime')">
+          <i [ngClass]="{'bi-caret-up-fill' : this.sortOrder == 'asc' && this.sortField == 'targetTime',
+            'bi-caret-down-fill' : this.sortOrder == 'desc' && this.sortField == 'targetTime',
+            'bi-caret-right-fill' : this.sortField != 'targetTime'}"></i>
+        </button> <br/>
+      </th>
     </tr>
     </thead>
     <tbody>
