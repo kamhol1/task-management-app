@@ -32,4 +32,10 @@ public class NoteController {
         noteService.updateNote(id, noteDto);
         return ResponseEntity.ok(new MessageResponse("Note updated successfully"));
     }
+
+    @DeleteMapping("/{id}")
+    ResponseEntity<MessageResponse> deleteNote(@PathVariable int id) {
+        noteService.deleteNote(id);
+        return ResponseEntity.ok(new MessageResponse("Note deleted successfully"));
+    }
 }

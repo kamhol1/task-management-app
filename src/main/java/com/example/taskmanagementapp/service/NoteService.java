@@ -25,18 +25,28 @@ public class NoteService {
     }
 
     @Transactional
-    public NoteDto createNote(NoteDto noteDto) {
+    public int createNote(NoteDto noteDto) {
         Note created = noteRepository.save(mapToNoteCreate(noteDto));
-        return mapToNoteDto(created);
+        return created.getId();
     }
 
     @Transactional
-    public NoteDto updateNote(int id, NoteDto noteDto) {
+    public int updateNote(int id, NoteDto noteDto) {
         Note toUpdate = noteRepository.findById(id).orElseThrow(
                 () -> new NoteNotFoundException(id)
         );
 
-        Note updated = noteRepository.save(mapToNoteUpdate(noteDto, toUpdate));
-        return mapToNoteDto(updated);
+        noteRepository.save(mapToNoteUpdate(noteDto, toUpdate));
+        return id;
+    }
+
+    @Transactional
+    public int deleteNote(int id) {
+        Note toDelete = noteRepository.findById(id).orElseThrow(
+                () -> new NoteNotFoundException(id)
+        );
+
+        noteRepository.delete(toDelete);
+        return id;
     }
 }

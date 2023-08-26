@@ -26,9 +26,12 @@
     <textarea class="form-control" #content="ngModel" id="content" name="content" rows="10" [(ngModel)]="note.content"></textarea>
     <button class="btn btn-primary mt-1" type="submit">
       <i class="bi bi-check2 mr-2"></i>Save
-    </button> <br/>
-    <button class="btn btn-secondary mt-1" (click)="listNotes()">
-      <i class="bi bi-arrow-left mr-2"></i>Back
     </button>
   </form>
+  <button class="btn btn-danger mt-1" (click)="deleteNote(note.id)">
+    <i class="bi bi-x mr-2"></i>Delete
+  </button> <br/>
+  <button class="btn btn-secondary mt-3" (click)="listNotes()">
+    <i class="bi bi-arrow-left mr-2"></i>Back
+  </button>
 </div>
