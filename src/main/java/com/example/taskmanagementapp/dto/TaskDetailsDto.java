@@ -8,10 +8,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public record TaskDetailsDto(
-        int id,
+        Integer id,
         String title,
         String description,
-        int categoryId,
+        Integer categoryId,
         String categoryName,
         StatusEnum status,
         PriorityEnum priority,

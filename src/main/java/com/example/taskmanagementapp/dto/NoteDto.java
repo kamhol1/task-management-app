@@ -3,9 +3,9 @@ package com.example.taskmanagementapp.dto;
 import java.time.LocalDateTime;
 
 public record NoteDto(
-        int id,
+        Integer id,
         String content,
-        int task,
+        Integer task,
         LocalDateTime createdOn
 ) {
 }
