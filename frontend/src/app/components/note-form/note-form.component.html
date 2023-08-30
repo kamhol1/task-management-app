@@ -1,6 +1,6 @@
 <div>
-  <form (ngSubmit)="onSubmit(form)" #form="ngForm">
-    <textarea class="form-control" #content="ngModel" id="content" name="content" [(ngModel)]="note.content" placeholder="Write note here..."></textarea>
+  <form [formGroup]="noteForm" (ngSubmit)="submitForm()">
+    <textarea class="form-control" id="content" name="content" formControlName="content" placeholder="Write note here..."></textarea>
     <button class="btn btn-primary mt-1" type="submit">
       <i class="bi bi-check2 mr-2"></i>Save
     </button>

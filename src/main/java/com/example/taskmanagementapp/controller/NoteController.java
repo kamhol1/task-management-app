@@ -2,6 +2,7 @@ package com.example.taskmanagementapp.controller;
 
 import com.example.taskmanagementapp.dto.NoteDto;
 import com.example.taskmanagementapp.service.NoteService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,13 +23,13 @@ public class NoteController {
     }
 
     @PostMapping("")
-    ResponseEntity<?> createNote(@RequestBody NoteDto noteDto) {
+    ResponseEntity<?> createNote(@Valid @RequestBody NoteDto noteDto) {
         noteService.createNote(noteDto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    ResponseEntity<MessageResponse> updateNote(@PathVariable int id, @RequestBody NoteDto noteDto) {
+    ResponseEntity<MessageResponse> updateNote(@PathVariable int id, @Valid @RequestBody NoteDto noteDto) {
         noteService.updateNote(id, noteDto);
         return ResponseEntity.ok(new MessageResponse("Note updated successfully"));
     }

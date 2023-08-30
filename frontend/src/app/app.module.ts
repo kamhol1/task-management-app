@@ -7,7 +7,7 @@ import {TaskListComponent} from './components/task-list/task-list.component';
 import {HttpClientModule} from "@angular/common/http";
 import {StringReplacePipe} from "./pipes/string-replace.pipe";
 import {TaskDetailsComponent} from './components/task-details/task-details.component';
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {NoteFormComponent} from './components/note-form/note-form.component';
 import {NoteListComponent} from './components/note-list/note-list.component';
 import {TaskAddComponent} from './components/task-add/task-add.component';
@@ -36,7 +36,8 @@ import {MatSnackBarModule} from "@angular/material/snack-bar";
     HttpClientModule,
     FormsModule,
     BrowserAnimationsModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {TaskDetailsModel} from "../../models/task-details.model";
 import {ActivatedRoute, ParamMap, Router} from "@angular/router";
 import {TaskService} from "../../services/task/task.service";
-import {NgForm} from "@angular/forms";
+import {FormBuilder, FormGroup, NgForm, Validators} from "@angular/forms";
 import {CategoryModel} from "../../models/category.model";
 import {CategoryService} from "../../services/category/category.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
@@ -26,13 +26,30 @@ export class TaskDetailsComponent implements OnInit {
     createdOn: '',
     notes: []
   };
+  taskForm: FormGroup;
   categories: CategoryModel[] = [];
+  submitted: boolean = false;
+  errors = {
+    title: '',
+    category: '',
+    priority: ''
+  };
 
   constructor(private taskService: TaskService,
               private categoryService: CategoryService,
               private route: ActivatedRoute,
               private router: Router,
-              private snackBar: MatSnackBar) {}
+              private snackBar: MatSnackBar,
+              private formBuilder: FormBuilder) {
+    this.taskForm = this.formBuilder.group({
+      title: '',
+      description: '',
+      category: 0,
+      status: '',
+      priority: '',
+      targetTime: ''
+    });
+  }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe({
@@ -58,6 +75,14 @@ export class TaskDetailsComponent implements OnInit {
       .subscribe({
         next: (task: TaskDetailsModel) => {
           this.task = task;
+          this.taskForm = this.formBuilder.group({
+            title: [task.title, Validators.required],
+            description: task.description,
+            category: [task.categoryId, Validators.required],
+            status: task.status,
+            priority: [task.priority, Validators.required],
+            targetTime: task.targetTime
+          });
         },
         error: (err) => {
           this.snackBar.open(err.error.message,
@@ -76,39 +101,34 @@ export class TaskDetailsComponent implements OnInit {
     this.router.navigate(['/']);
   }
 
-  onSubmit(form: NgForm) {
-    if (form.valid) {
-      const toUpdate: TaskModel = {
-        id: this.task.id,
-        title: this.task.title,
-        description: this.task.description,
-        category: this.task.categoryId,
-        status: this.task.status,
-        priority: this.task.priority,
-        targetTime: this.task.targetTime
-      };
+  submitForm() {
+    this.submitted = true;
 
-      this.taskService.updateTask(this.task.id, toUpdate)
-        .subscribe({
-          next: res => {
-            this.snackBar.open(res.message,
-              'OK',
-              {
-                verticalPosition: 'top',
-                panelClass: ['app-notification-success'],
-                duration: 5000
-              });
-          },
-          error: err => {
-            this.snackBar.open(err.error.message,
-              'OK',
-              {
-                verticalPosition: 'top',
-                panelClass: ['app-notification-error'],
-                duration: 5000
-              });
-          }
-        });
-    }
+    const formData = this.taskForm.value;
+    const toUpdate: TaskModel = {
+      id: this.task.id,
+      title: formData.title,
+      description: formData.description,
+      category: formData.category,
+      status: formData.status,
+      priority: formData.priority,
+      targetTime: formData.targetTime
+    };
+
+    this.taskService.updateTask(this.task.id, toUpdate)
+      .subscribe({
+        next: res => {
+          this.snackBar.open(res.message,
+            'OK',
+            {
+              verticalPosition: 'top',
+              panelClass: ['app-notification-success'],
+              duration: 5000
+            });
+        },
+        error: err => {
+          this.errors = err.error;
+        }
+      });
   }
 }

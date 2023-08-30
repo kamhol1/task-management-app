@@ -1,9 +1,8 @@
 import {Component, Input} from '@angular/core';
 import {NoteModel} from "../../models/note.model";
-import {NgForm} from "@angular/forms";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {NoteService} from "../../services/note/note.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
-import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-note-list',
@@ -14,16 +13,16 @@ export class NoteListComponent {
   @Input()
   notes: NoteModel[] = [];
   editMode: boolean = false;
-  note: NoteModel = {
-    id: 0,
-    content: '',
-    task: 0,
-    createdOn: ''
-  };
+  noteForm!: FormGroup;
+  note!: NoteModel;
 
   constructor(private noteService: NoteService,
               private snackBar: MatSnackBar,
-              private router: Router) { }
+              private formBuilder: FormBuilder) {
+    this.noteForm = this.formBuilder.group({
+      content: ''
+    });
+  }
 
   editNote(id: number) {
     this.editMode = true;
@@ -32,9 +31,18 @@ export class NoteListComponent {
       .subscribe({
         next: note => {
           this.note = note;
+          this.noteForm = this.formBuilder.group({
+            content: [note.content, Validators.required]
+          });
         },
         error: err => {
-          console.log(err);
+          this.snackBar.open(err.error.message,
+            'OK',
+            {
+              verticalPosition: 'top',
+              panelClass: ['app-notification-error'],
+              duration: 5000
+            });
         }
       });
   }
@@ -43,19 +51,25 @@ export class NoteListComponent {
     this.editMode = false;
   }
 
-  onSubmit(form: NgForm) {
-    if (form.valid) {
-      this.noteService.updateNote(this.note.id, this.note)
-        .subscribe({
-          next: res => {
-            console.log(res);
-            location.reload();
-          },
-          error: err => {
-            console.log(err);
-          }
-        });
-    }
+  submitForm() {
+    const formData = this.noteForm.value;
+    this.note.content = formData.content;
+
+    this.noteService.updateNote(this.note.id, this.note)
+      .subscribe({
+        next: () => {
+          location.reload();
+        },
+        error: err => {
+          this.snackBar.open(err.error.content,
+            'OK',
+            {
+              verticalPosition: 'top',
+              panelClass: ['app-notification-error'],
+              duration: 5000
+            });
+        }
+      });
   }
 
   deleteNote(id: number) {

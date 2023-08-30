@@ -3,6 +3,8 @@ package com.example.taskmanagementapp.dto;
 import com.example.taskmanagementapp.model.PriorityEnum;
 import com.example.taskmanagementapp.model.StatusEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 import java.util.List;

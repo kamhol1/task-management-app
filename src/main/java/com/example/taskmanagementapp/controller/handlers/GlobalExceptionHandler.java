@@ -1,4 +1,4 @@
-package com.example.taskmanagementapp.controller;
+package com.example.taskmanagementapp.controller.handlers;
 
 import com.example.taskmanagementapp.exception.CategoryNotFoundException;
 import com.example.taskmanagementapp.exception.NoteNotFoundException;

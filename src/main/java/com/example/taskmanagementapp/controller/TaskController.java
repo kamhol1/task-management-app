@@ -3,6 +3,7 @@ package com.example.taskmanagementapp.controller;
 import com.example.taskmanagementapp.dto.TaskDetailsDto;
 import com.example.taskmanagementapp.dto.TaskDto;
 import com.example.taskmanagementapp.service.TaskService;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
@@ -59,13 +60,13 @@ public class TaskController {
     }
 
     @PostMapping("")
-    ResponseEntity<MessageResponse> createTask(@RequestBody TaskDto taskDto) {
+    ResponseEntity<MessageResponse> createTask(@Valid @RequestBody TaskDto taskDto) {
         taskService.createTask(taskDto);
         return new ResponseEntity<>(new MessageResponse("New task created successfully"), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    ResponseEntity<MessageResponse> updateTask(@PathVariable int id, @RequestBody TaskDto taskDto) {
+    ResponseEntity<MessageResponse> updateTask(@PathVariable int id, @Valid @RequestBody TaskDto taskDto) {
         taskService.updateTask(id, taskDto);
         return ResponseEntity.ok(new MessageResponse("Task updated successfully"));
     }

@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {CategoryService} from "../../services/category/category.service";
-import {NgForm} from "@angular/forms";
+import {Form, FormBuilder, FormGroup, NgForm, Validators} from "@angular/forms";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {CategoryModel} from "../../models/category.model";
 
@@ -10,33 +10,45 @@ import {CategoryModel} from "../../models/category.model";
   styleUrls: ['./category-form.component.css']
 })
 export class CategoryFormComponent {
-  category: CategoryModel = {
-    id: 0,
+  categoryForm: FormGroup;
+  submitted: boolean = false;
+  errors = {
     name: ''
   };
 
   constructor(private categoryService: CategoryService,
-              private snackBar: MatSnackBar) { }
+              private snackBar: MatSnackBar,
+              private formBuilder: FormBuilder) {
+    this.categoryForm = this.formBuilder.group({
+      name: ['', Validators.required]
+    });
+  }
 
-  onSubmit(form: NgForm) {
-    if (form.valid) {
-      this.categoryService.saveCategory(this.category)
-        .subscribe({
-          next: res => {
-            this.snackBar.open(res.message,
-              'OK',
-              {
-                verticalPosition: 'top',
-                panelClass: ['app-notification-success'],
-                duration: 5000
-              });
-            location.reload();
-          },
-          error: err => {
-            console.log(err);
-          }
-        });
-    }
+  submitForm() {
+    this.submitted = true;
+    const formData = this.categoryForm.value;
+
+    const newCategory: CategoryModel = {
+      id: 0,
+      name: formData.name
+    };
+console.log(formData)
+    this.categoryService.saveCategory(newCategory)
+      .subscribe({
+        next: res => {
+          this.snackBar.open(res.message,
+            'OK',
+            {
+              verticalPosition: 'top',
+              panelClass: ['app-notification-success'],
+              duration: 5000
+            });
+          location.reload();
+        },
+        error: err => {
+          this.errors = err.error;
+        }
+      });
   }
 
 }

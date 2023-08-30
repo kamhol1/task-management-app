@@ -2,6 +2,7 @@ package com.example.taskmanagementapp.controller;
 
 import com.example.taskmanagementapp.dto.CategoryDto;
 import com.example.taskmanagementapp.service.CategoryService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,13 +27,13 @@ public class CategoryController {
     }
 
     @PostMapping("")
-    ResponseEntity<MessageResponse> createCategory(@RequestBody CategoryDto categoryDto) {
+    ResponseEntity<MessageResponse> createCategory(@Valid @RequestBody CategoryDto categoryDto) {
         CategoryDto created = categoryService.createCategory(categoryDto);
         return new ResponseEntity<>(new MessageResponse("Category \"" + created.name() + "\" created successfully"), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    ResponseEntity<MessageResponse> updateCategory(@PathVariable int id, @RequestBody CategoryDto categoryDto) {
+    ResponseEntity<MessageResponse> updateCategory(@PathVariable int id, @Valid @RequestBody CategoryDto categoryDto) {
         CategoryDto updated = categoryService.updateCategory(id, categoryDto);
         return ResponseEntity.ok(new MessageResponse("Category with id " + updated.id() + " has been updated successfully"));
     }

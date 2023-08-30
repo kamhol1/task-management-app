@@ -22,8 +22,8 @@
   </div>
 </div>
 <div *ngIf="editMode">
-  <form (ngSubmit)="onSubmit(form)" #form="ngForm">
-    <textarea class="form-control" #content="ngModel" id="content" name="content" rows="10" [(ngModel)]="note.content"></textarea>
+  <form [formGroup]="noteForm" (ngSubmit)="submitForm()">
+    <textarea class="form-control" id="content" name="content" rows="10" formControlName="content"></textarea>
     <button class="btn btn-primary mt-1" type="submit">
       <i class="bi bi-check2 mr-2"></i>Save
     </button>

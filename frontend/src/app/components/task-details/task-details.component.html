@@ -1,41 +1,53 @@
 <div>
   <div class="row">
     <div class="col">
-      <form (ngSubmit)="onSubmit(form)" #form="ngForm">
+      <form [formGroup]="taskForm" (ngSubmit)="submitForm()">
         <label for="id">Id: </label>
-        <input class="form-control" type="text" #id="ngModel" id="id" name="id" [ngModel]="task.id" disabled />
+        <input class="form-control" type="text" id="id" name="id" value="{{ task.id }}" disabled /> <br/>
 
         <label for="title">Title: </label>
-        <input class="form-control" type="text" #title="ngModel" id="title" name="title" [(ngModel)]="task.title" required />
+        <input class="form-control" type="text" id="title" name="title" formControlName="title" />
+
+        <span class="text-danger" *ngIf="submitted && taskForm.get('title')?.hasError('required')">
+          {{ errors.title }}
+        </span> <br/>
 
         <label for="description">Description: </label>
-        <textarea class="form-control" rows=8 #description="ngModel" id="description" name="description" [(ngModel)]="task.description"></textarea>
+        <textarea class="form-control" rows=5 id="description" name="description" formControlName="description"></textarea> <br/>
 
         <label for="category">Category: </label>
-        <select class="form-control" #category="ngModel" id="category" name="category" [(ngModel)]="task.categoryId" required>
+        <select class="form-control" id="category" name="category"  formControlName="category">
           <option *ngFor="let category of categories" [ngValue]="category.id">{{ category.name }}</option>
         </select>
 
+        <span class="text-danger" *ngIf="submitted && taskForm.get('category')?.hasError('required')">
+          {{ errors.category }}
+        </span> <br/>
+
         <label for="priority">Priority: </label>
-        <select class="form-control" #priority="ngModel" id="priority" name="priority" [(ngModel)]="task.priority" required>
+        <select class="form-control" id="priority" name="priority" formControlName="priority">
           <option value="LOW">Low</option>
           <option value="MEDIUM">Medium</option>
           <option value="HIGH">High</option>
         </select>
 
+        <span class="text-danger" *ngIf="submitted && taskForm.get('priority')?.hasError('required')">
+          {{ errors.priority }}
+        </span> <br/>
+
         <label for="status">Status: </label>
-        <select class="form-control" #status="ngModel" id="status" name="status" [(ngModel)]="task.status">
+        <select class="form-control" id="status" name="status" formControlName="status">
           <option value="NEW">New</option>
           <option value="IN_PROGRESS">In Progress</option>
           <option value="COMPLETED">Completed</option>
           <option value="CANCELLED">Cancelled</option>
-        </select>
+        </select> <br/>
 
         <label for="targetTime">Target time: </label>
-        <input class="form-control" type="datetime-local" #targetTime="ngModel" id="targetTime" name="targetTime" [(ngModel)]="task.targetTime" />
+        <input class="form-control" type="datetime-local" id="targetTime" name="targetTime" formControlName="targetTime" /> <br/>
 
         <label for="createdOn">Creation time: </label>
-        <input class="form-control" type="datetime-local" #createdOn="ngModel" id="createdOn" name="createdOn" [ngModel]="task.createdOn" disabled /> <br/>
+        <input class="form-control" type="datetime-local" id="createdOn" name="createdOn" value="{{ task.createdOn }}" disabled /> <br/>
 
         <button class="btn btn-primary" type="submit">
           <i class="bi bi-check2 mr-2"></i>Save
@@ -48,12 +60,6 @@
     </div>
 
   </div> <br/>
-
-  <!--      <div>-->
-  <!--        <span>Showing {{ 1 + offset }} - {{ page * size + numberOfElements }} </span> <span>of {{ totalElements }}</span>-->
-  <!--        <button class="btn btn-link" (click)="previousPage()">Prev page</button>-->
-  <!--        <button class="btn btn-link" (click)="nextPage()">Next page</button>-->
-  <!--      </div>-->
 
   <div class="row">
     <div class="col">

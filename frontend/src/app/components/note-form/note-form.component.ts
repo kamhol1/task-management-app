@@ -1,8 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {NgForm} from "@angular/forms";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {NoteService} from "../../services/note/note.service";
 import {ActivatedRoute, ParamMap} from "@angular/router";
 import {NoteModel} from "../../models/note.model";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-note-form',
@@ -10,37 +11,50 @@ import {NoteModel} from "../../models/note.model";
   styleUrls: ['./note-form.component.css']
 })
 export class NoteFormComponent implements OnInit {
-  note: NoteModel = {
-    id: 0,
-    content: '',
-    task: 0,
-    createdOn: ''
-  };
+  taskId!: number;
+  noteForm: FormGroup;
 
   constructor(private noteService: NoteService,
-              private route: ActivatedRoute) { }
+              private route: ActivatedRoute,
+              private snackBar: MatSnackBar,
+              private formBuilder: FormBuilder) {
+    this.noteForm = this.formBuilder.group({
+      content: ['', Validators.required]
+    });
+  }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe({
       next: (params: ParamMap) => {
         const id = params.get('id');
-        if (id) this.note.task = parseInt(id);
+        if (id) this.taskId = parseInt(id);
       }
     });
   }
 
-  onSubmit(form: NgForm) {
-    if (form.valid) {
-      this.noteService.saveNote(this.note)
-        .subscribe({
-          next: res => {
-            console.log(res);
-            location.reload(); // TODO: Refresh only note-list, not the whole page
-          },
-          error: err => {
-            console.log(err);
-          }
-        });
-    }
+  submitForm() {
+    const formData = this.noteForm.value;
+    const newNote: NoteModel = {
+      id: 0,
+      content: formData.content,
+      task: this.taskId,
+      createdOn: ''
+    };
+
+    this.noteService.saveNote(newNote)
+      .subscribe({
+        next: () => {
+          location.reload();
+        },
+        error: err => {
+          this.snackBar.open(err.error.content,
+            'OK',
+            {
+              verticalPosition: 'top',
+              panelClass: ['app-notification-error'],
+              duration: 5000
+            });
+        }
+      });
   }
 }

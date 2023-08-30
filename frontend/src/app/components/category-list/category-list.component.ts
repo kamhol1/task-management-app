@@ -48,7 +48,7 @@ export class CategoryListComponent implements OnInit {
           this.router.navigate(['./categories'])
         },
         error: err => {
-          this.snackBar.open(err.error.message,
+          this.snackBar.open(err.error.name,
             'OK',
             {
               verticalPosition: 'top',
