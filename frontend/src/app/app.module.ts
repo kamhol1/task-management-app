@@ -4,7 +4,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {TaskListComponent} from './components/task-list/task-list.component';
-import {HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {StringReplacePipe} from "./pipes/string-replace.pipe";
 import {TaskDetailsComponent} from './components/task-details/task-details.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
@@ -16,6 +16,11 @@ import {CategoryListComponent} from './components/category-list/category-list.co
 import {CategoryFormComponent} from './components/category-form/category-form.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatSnackBarModule} from "@angular/material/snack-bar";
+import { AuthComponent } from './components/auth/auth.component';
+import { LoginFormComponent } from './components/login-form/login-form.component';
+import { RegisterFormComponent } from './components/register-form/register-form.component';
+import {TokenInterceptorService} from "./interceptors/token-interceptor.service";
+import {AuthGuard} from "./services/auth/auth.guard";
 
 @NgModule({
   declarations: [
@@ -28,7 +33,10 @@ import {MatSnackBarModule} from "@angular/material/snack-bar";
     TaskAddComponent,
     NavbarComponent,
     CategoryListComponent,
-    CategoryFormComponent
+    CategoryFormComponent,
+    AuthComponent,
+    LoginFormComponent,
+    RegisterFormComponent
   ],
   imports: [
     BrowserModule,
@@ -39,7 +47,13 @@ import {MatSnackBarModule} from "@angular/material/snack-bar";
     MatSnackBarModule,
     ReactiveFormsModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptorService,
+      multi: true,
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

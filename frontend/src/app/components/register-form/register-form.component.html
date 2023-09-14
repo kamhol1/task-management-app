@@ -1,0 +1,41 @@
+<div class="row justify-content-md-center">
+  <div class="col-4" style="min-width: 300px">
+    <h1 class="mb-4 text-center">Register</h1>
+
+    <form [formGroup]="registerForm" (ngSubmit)="submitRegister()">
+      <label for="firstName">First name: </label>
+      <input class="form-control" type="text" id="firstName" name="firstName" formControlName="firstName" /> <br/>
+
+      <label for="lastName">Last name: </label>
+      <input class="form-control" type="text" id="lastName" name="lastName" formControlName="lastName" /> <br/>
+
+      <label for="username">Username: </label>
+      <input class="form-control" type="text" id="username" name="username" formControlName="username" minlength="5" />
+
+      <span class="text-danger" *ngIf="submitted && registerForm.get('username')?.hasError('required') || registerForm.get('username')?.hasError('minlength')">
+        {{ errors.username }}
+      </span> <br/>
+
+
+      <label for="password">Password: </label>
+      <input class="form-control" type="password" id="password" name="password" formControlName="password" minlength="8" />
+
+      <span class="text-danger" *ngIf="submitted && registerForm.get('password')?.hasError('required') || registerForm.get('password')?.hasError('minlength')">
+        {{ errors.password }}
+      </span> <br/>
+
+      <label for="passwordConfirmation">Confirm password: </label>
+      <input class="form-control" type="password" id="passwordConfirmation" name="passwordConfirmation" formControlName="passwordConfirmation" />
+
+      <span class="text-danger" *ngIf="submitted && registerForm.get('passwordConfirmation')?.hasError('required')">
+        {{ errors.passwordConfirmation }}
+      </span> <br/>
+
+      <button class="btn btn-primary mt-2" type="submit">
+        <i class="bi bi-check2 mr-2"></i>Register
+      </button>
+
+      <button class="btn btn-link ms-3 mt-2" [routerLink]="['/login']">Already registered? Login</button>
+    </form>
+  </div>
+</div>

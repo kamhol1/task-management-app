@@ -1,6 +1,6 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {CategoryService} from "../../services/category/category.service";
-import {Form, FormBuilder, FormGroup, NgForm, Validators} from "@angular/forms";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {CategoryModel} from "../../models/category.model";
 
@@ -32,7 +32,7 @@ export class CategoryFormComponent {
       id: 0,
       name: formData.name
     };
-console.log(formData)
+
     this.categoryService.saveCategory(newCategory)
       .subscribe({
         next: res => {

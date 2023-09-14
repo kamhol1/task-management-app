@@ -1,11 +1,11 @@
-<div class="mt-5 w-50">
+<div class="mt-5">
   <form [formGroup]="categoryForm" (ngSubmit)="submitForm()">
-    <h2 class="mb-3">New category:</h2>
+    <h1 class="mb-4 text-center">New category:</h1>
     <input class="form-control" name="category" type="text" formControlName="name" placeholder="Category name..." />
 
     <span class="text-danger" *ngIf="submitted && categoryForm.get('name')?.hasError('required')">
-        {{ errors.name }}
-      </span> <br/>
+      {{ errors.name }}
+    </span> <br/>
 
     <button class="btn btn-primary mt-2" type="submit">
       <i class="bi bi-plus-lg mr-2"></i>Add category

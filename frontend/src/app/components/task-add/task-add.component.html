@@ -1,5 +1,7 @@
-<div>
-  <div class="w-50">
+<div class="row justify-content-md-center">
+  <div class="col-4" style="min-width: 400px">
+    <h1 class="mb-4 text-center">New task</h1>
+
     <form [formGroup]="taskForm" (ngSubmit)="submitForm()">
       <label for="title">Title: </label>
       <input class="form-control" type="text" id="title" name="title" formControlName="title" />
@@ -43,6 +45,4 @@
       <i class="bi bi-arrow-left mr-2"></i>Back
     </button>
   </div>
-
-
 </div>
