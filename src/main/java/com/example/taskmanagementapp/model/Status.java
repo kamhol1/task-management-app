@@ -1,6 +1,6 @@
 package com.example.taskmanagementapp.model;
 
-public enum StatusEnum {
+public enum Status {
     NEW,
     IN_PROGRESS,
     COMPLETED,

@@ -21,12 +21,6 @@ public class CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
-//    public List<CategoryDto> getAllCategories() {
-//        return categoryRepository.findAll().stream()
-//                .map(CategoryDtoMapper::mapToCategoryDto)
-//                .toList();
-//    }
-
     public List<CategoryDto> getNotHiddenCategories() {
         return categoryRepository.findAllByHiddenIsFalse().stream()
                 .map(CategoryDtoMapper::mapToCategoryDto)

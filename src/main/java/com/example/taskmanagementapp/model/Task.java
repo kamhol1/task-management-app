@@ -1,6 +1,5 @@
 package com.example.taskmanagementapp.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -33,11 +32,11 @@ public class Task {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private StatusEnum status;
+    private Status status;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "priority", nullable = false)
-    private PriorityEnum priority;
+    private Priority priority;
 
     @Column(name = "target_time")
     private LocalDateTime targetTime;

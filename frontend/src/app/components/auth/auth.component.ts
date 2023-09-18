@@ -8,10 +8,17 @@ import {AuthService} from "../../services/auth/auth.service";
 })
 export class AuthComponent {
 
+  userData = {
+    firstName: '',
+    lastName: '',
+    username: '',
+    role: ''
+  };
   loggedIn: boolean = false;
 
   constructor(private authService: AuthService) {
     this.loggedIn = authService.isLoggedIn();
+    this.userData = authService.userData;
   }
 
   logout() {

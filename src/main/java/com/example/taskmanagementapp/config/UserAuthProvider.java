@@ -5,11 +5,13 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.example.taskmanagementapp.dto.UserDto;
+import com.example.taskmanagementapp.model.Role;
 import com.example.taskmanagementapp.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.util.Base64;
@@ -45,6 +47,7 @@ public class UserAuthProvider {
                 .withExpiresAt(validity)
                 .withClaim("firstName", user.getFirstName())
                 .withClaim("lastName", user.getLastName())
+                .withClaim("role", user.getRole().name())
                 .sign(algorithm);
     }
 
@@ -59,9 +62,10 @@ public class UserAuthProvider {
                 .username(decoded.getSubject())
                 .firstName(decoded.getClaim("firstName").asString())
                 .lastName(decoded.getClaim("lastName").asString())
+                .role(Role.valueOf(decoded.getClaim("role").asString()))
                 .build();
 
-        return new UsernamePasswordAuthenticationToken(user, null, Collections.emptyList());
+        return new UsernamePasswordAuthenticationToken(user, null, Collections.singleton(new SimpleGrantedAuthority("ROLE_" + user.getRole().name())));
     }
 
 }

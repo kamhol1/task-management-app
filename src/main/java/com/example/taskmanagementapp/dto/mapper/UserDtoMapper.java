@@ -13,6 +13,7 @@ public class UserDtoMapper {
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .username(user.getUsername())
+                .role(user.getRole())
                 .build();
     }
 }

@@ -1,5 +1,6 @@
 package com.example.taskmanagementapp.dto;
 
+import com.example.taskmanagementapp.model.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,5 +15,7 @@ public class UserDto {
     private String firstName;
     private String lastName;
     private String username;
+    private Role role;
     private String token;
+
 }

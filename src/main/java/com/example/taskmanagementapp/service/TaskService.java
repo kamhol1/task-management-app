@@ -4,7 +4,7 @@ import com.example.taskmanagementapp.dto.TaskDetailsDto;
 import com.example.taskmanagementapp.dto.TaskDto;
 import com.example.taskmanagementapp.dto.mapper.TaskDtoMapper;
 import com.example.taskmanagementapp.exception.TaskNotFoundException;
-import com.example.taskmanagementapp.model.StatusEnum;
+import com.example.taskmanagementapp.model.Status;
 import com.example.taskmanagementapp.model.Task;
 import com.example.taskmanagementapp.repository.TaskRepository;
 import com.example.taskmanagementapp.specification.SearchCriteria;
@@ -15,7 +15,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
 import java.util.Optional;
 
 import static com.example.taskmanagementapp.dto.mapper.TaskDtoMapper.mapToTaskDetailsDto;
@@ -55,7 +54,7 @@ public class TaskService {
     @Transactional
     public TaskDto createTask(TaskDto taskDto) {
         Task toSave = TaskDtoMapper.mapToTaskCreate(taskDto);
-        toSave.setStatus(StatusEnum.NEW);
+        toSave.setStatus(Status.NEW);
 
         Task created = taskRepository.save(toSave);
         return mapToTaskDto(created);

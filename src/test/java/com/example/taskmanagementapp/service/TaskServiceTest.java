@@ -4,7 +4,6 @@ import com.example.taskmanagementapp.dto.TaskDetailsDto;
 import com.example.taskmanagementapp.dto.TaskDto;
 import com.example.taskmanagementapp.exception.TaskNotFoundException;
 import com.example.taskmanagementapp.model.Category;
-import com.example.taskmanagementapp.model.StatusEnum;
 import com.example.taskmanagementapp.model.Task;
 import com.example.taskmanagementapp.repository.TaskRepository;
 import org.junit.jupiter.api.Test;
@@ -13,9 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 

@@ -1,0 +1,1 @@
+CREATE CAST (varchar AS role_enum) WITH INOUT AS IMPLICIT;

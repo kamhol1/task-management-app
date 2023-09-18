@@ -1,6 +1,6 @@
 package com.example.taskmanagementapp.specification;
 
-import com.example.taskmanagementapp.model.StatusEnum;
+import com.example.taskmanagementapp.model.Status;
 import com.example.taskmanagementapp.model.Task;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -46,12 +46,12 @@ public class TaskSpecification implements Specification<Task> {
             if (criteria.getKey().equals("excludeCompletedAndCancelled") && criteria.getValue().equals(true)) {
                 predicates.add(
                         criteriaBuilder.notEqual(
-                                criteriaBuilder.lower(root.get("status").as(String.class)), StatusEnum.COMPLETED.toString().toLowerCase()
+                                criteriaBuilder.lower(root.get("status").as(String.class)), Status.COMPLETED.toString().toLowerCase()
                         )
                 );
                 predicates.add(
                         criteriaBuilder.notEqual(
-                                criteriaBuilder.lower(root.get("status").as(String.class)), StatusEnum.CANCELLED.toString().toLowerCase()
+                                criteriaBuilder.lower(root.get("status").as(String.class)), Status.CANCELLED.toString().toLowerCase()
                         )
                 );
             }

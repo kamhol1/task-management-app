@@ -1,0 +1,3 @@
+CREATE TYPE role_enum AS ENUM ('USER', 'ADMIN');
+
+ALTER TABLE users ADD role role_enum DEFAULT 'USER' NOT NULL;

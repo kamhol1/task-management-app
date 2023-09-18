@@ -12,7 +12,7 @@ const routes: Routes = [
   { path: '', component: TaskListComponent, canActivate: [AuthGuard] },
   { path: 'task/:id', component: TaskDetailsComponent, canActivate: [AuthGuard] },
   { path: 'add', component: TaskAddComponent, canActivate: [AuthGuard] },
-  { path: 'categories', component: CategoryListComponent, canActivate: [AuthGuard] },
+  { path: 'categories', component: CategoryListComponent, canActivate: [AuthGuard], data: { role: ['ADMIN'] } },
   { path: 'login', component: LoginFormComponent },
   { path: 'register', component: RegisterFormComponent }
 ];

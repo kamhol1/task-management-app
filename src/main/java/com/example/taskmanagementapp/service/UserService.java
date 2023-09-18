@@ -7,6 +7,7 @@ import com.example.taskmanagementapp.exception.InvalidPasswordException;
 import com.example.taskmanagementapp.exception.PasswordsDoNotMatchException;
 import com.example.taskmanagementapp.exception.UserAlreadyExistsException;
 import com.example.taskmanagementapp.exception.UserNotFoundException;
+import com.example.taskmanagementapp.model.Role;
 import com.example.taskmanagementapp.model.User;
 import com.example.taskmanagementapp.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -55,6 +56,7 @@ public class UserService {
         }
 
         User user = mapToUser(signUpDto);
+        user.setRole(Role.USER);
         user.setPassword(passwordEncoder.encode(CharBuffer.wrap(signUpDto.password())));
         User created = userRepository.save(user);
 

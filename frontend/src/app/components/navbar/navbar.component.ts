@@ -1,4 +1,5 @@
 import {Component} from '@angular/core';
+import {AuthService} from "../../services/auth/auth.service";
 
 @Component({
   selector: 'app-navbar',
@@ -7,4 +8,13 @@ import {Component} from '@angular/core';
 })
 export class NavbarComponent {
 
+  admin: boolean = false;
+
+  constructor(private authService: AuthService) {
+    this.admin = authService.userData.role == 'ADMIN';
+  }
+
+  isAdmin(): boolean {
+    return this.admin;
+  }
 }

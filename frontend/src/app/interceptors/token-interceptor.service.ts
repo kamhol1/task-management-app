@@ -11,7 +11,6 @@ export class TokenInterceptorService implements HttpInterceptor{
   constructor(private authService: AuthService) { }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    console.log("Tak")
     const token = this.authService.getAuthToken();
     let headers = {};
 

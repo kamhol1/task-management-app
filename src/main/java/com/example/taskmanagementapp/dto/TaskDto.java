@@ -1,8 +1,7 @@
 package com.example.taskmanagementapp.dto;
 
-import com.example.taskmanagementapp.model.PriorityEnum;
-import com.example.taskmanagementapp.model.StatusEnum;
-import jakarta.validation.constraints.Min;
+import com.example.taskmanagementapp.model.Priority;
+import com.example.taskmanagementapp.model.Status;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -15,9 +14,9 @@ public record TaskDto(
         String description,
         @NotNull(message = "Category must not be empty")
         Integer category,
-        StatusEnum status,
+        Status status,
         @NotNull(message = "Priority must not be empty")
-        PriorityEnum priority,
+        Priority priority,
         LocalDateTime targetTime
 ) {
 }
