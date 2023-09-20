@@ -9,6 +9,8 @@ public record NoteDto(
         @NotBlank(message = "Note content must not be blank")
         String content,
         Integer task,
+        Integer userId,
+        String username,
         LocalDateTime createdOn
 ) {
 }

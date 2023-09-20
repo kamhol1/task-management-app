@@ -21,7 +21,8 @@ export class TaskService {
     idFilter?: string,
     titleFilter?: string,
     statusFilter?: string,
-    priorityFilter?: string
+    priorityFilter?: string,
+    userFilter?: string
   ): Observable<any> {
     let params = new HttpParams()
       .set('page', page)
@@ -32,6 +33,7 @@ export class TaskService {
       .set('title', titleFilter || '')
       .set('status', statusFilter || '')
       .set('priority', priorityFilter || '')
+      .set('user', userFilter || '')
 
     return this.http.get<TaskModel[]>(this.apiUrl + '/active', { params });
   }

@@ -17,6 +17,8 @@ public record TaskDto(
         Status status,
         @NotNull(message = "Priority must not be empty")
         Priority priority,
+        Integer user,
+        String username,
         LocalDateTime targetTime
 ) {
 }

@@ -3,6 +3,8 @@ package com.example.taskmanagementapp.service;
 import com.example.taskmanagementapp.dto.CredentialsDto;
 import com.example.taskmanagementapp.dto.SignUpDto;
 import com.example.taskmanagementapp.dto.UserDto;
+import com.example.taskmanagementapp.dto.UserReadDto;
+import com.example.taskmanagementapp.dto.mapper.UserDtoMapper;
 import com.example.taskmanagementapp.exception.InvalidPasswordException;
 import com.example.taskmanagementapp.exception.PasswordsDoNotMatchException;
 import com.example.taskmanagementapp.exception.UserAlreadyExistsException;
@@ -10,11 +12,13 @@ import com.example.taskmanagementapp.exception.UserNotFoundException;
 import com.example.taskmanagementapp.model.Role;
 import com.example.taskmanagementapp.model.User;
 import com.example.taskmanagementapp.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.nio.CharBuffer;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static com.example.taskmanagementapp.dto.mapper.SignUpDtoMapper.mapToUser;
@@ -44,6 +48,7 @@ public class UserService {
         throw new InvalidPasswordException();
     }
 
+    @Transactional
     public UserDto register(SignUpDto signUpDto) {
         if (!Arrays.equals(signUpDto.password(), signUpDto.passwordConfirmation())) {
             throw new PasswordsDoNotMatchException();
@@ -61,5 +66,11 @@ public class UserService {
         User created = userRepository.save(user);
 
         return mapToUserDto(created);
+    }
+
+    public List<UserReadDto> getUsers() {
+        return userRepository.findAll().stream()
+                .map(UserDtoMapper::mapToUserReadDto)
+                .toList();
     }
 }

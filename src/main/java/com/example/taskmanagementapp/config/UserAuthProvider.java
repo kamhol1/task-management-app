@@ -21,14 +21,8 @@ import java.util.Date;
 @Component
 public class UserAuthProvider {
 
-    private final UserRepository userRepository;
-
     @Value("${security.jwt.token.secret-key:secret-key}")
     private String secretKey;
-
-    public UserAuthProvider(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     @PostConstruct
     protected void init() {

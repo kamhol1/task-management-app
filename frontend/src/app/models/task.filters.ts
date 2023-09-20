@@ -3,4 +3,5 @@ export interface TaskFilters {
   titleFilter?: string;
   statusFilter?: string;
   priorityFilter?: string;
+  userFilter?: string;
 }

@@ -5,5 +5,7 @@ export interface TaskModel {
   category: number
   status: string
   priority: string
+  user?: number
+  username?: string
   targetTime: string
 }

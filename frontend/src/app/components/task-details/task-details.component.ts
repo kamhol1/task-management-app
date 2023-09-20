@@ -7,6 +7,8 @@ import {CategoryModel} from "../../models/category.model";
 import {CategoryService} from "../../services/category/category.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {TaskModel} from "../../models/task.model";
+import {UserModel} from "../../models/user.model";
+import {UserService} from "../../services/user/user.service";
 
 @Component({
   selector: 'app-task-details',
@@ -26,8 +28,9 @@ export class TaskDetailsComponent implements OnInit {
     createdOn: '',
     notes: []
   };
-  taskForm: FormGroup;
   categories: CategoryModel[] = [];
+  users: UserModel[] = [];
+  taskForm: FormGroup;
   submitted: boolean = false;
   errors = {
     title: '',
@@ -37,6 +40,7 @@ export class TaskDetailsComponent implements OnInit {
 
   constructor(private taskService: TaskService,
               private categoryService: CategoryService,
+              private userService: UserService,
               private route: ActivatedRoute,
               private router: Router,
               private snackBar: MatSnackBar,
@@ -47,6 +51,7 @@ export class TaskDetailsComponent implements OnInit {
       category: 0,
       status: '',
       priority: '',
+      user: 0,
       targetTime: ''
     });
   }
@@ -65,7 +70,29 @@ export class TaskDetailsComponent implements OnInit {
           this.categories = categories;
         },
         error: err => {
-          console.log(err);
+          this.snackBar.open(err.error.message,
+            'OK',
+            {
+              verticalPosition: 'top',
+              panelClass: ['app-notification-error'],
+              duration: 5000
+            });
+        }
+      });
+
+    this.userService.getUsers()
+      .subscribe({
+        next: users => {
+          this.users = users;
+        },
+        error: err => {
+          this.snackBar.open(err.error.message,
+            'OK',
+            {
+              verticalPosition: 'top',
+              panelClass: ['app-notification-error'],
+              duration: 5000
+            });
         }
       });
   }
@@ -81,6 +108,7 @@ export class TaskDetailsComponent implements OnInit {
             category: [task.categoryId, Validators.required],
             status: task.status,
             priority: [task.priority, Validators.required],
+            user: task.userId,
             targetTime: task.targetTime
           });
         },
@@ -112,6 +140,7 @@ export class TaskDetailsComponent implements OnInit {
       category: formData.category,
       status: formData.status,
       priority: formData.priority,
+      user: formData.user,
       targetTime: formData.targetTime
     };
 

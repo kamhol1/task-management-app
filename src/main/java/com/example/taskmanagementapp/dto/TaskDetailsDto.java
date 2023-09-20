@@ -15,8 +15,12 @@ public record TaskDetailsDto(
         String categoryName,
         Status status,
         Priority priority,
-        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm") LocalDateTime targetTime,
-        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime createdOn,
+        Integer userId,
+        String username,
+        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+        LocalDateTime targetTime,
+        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+        LocalDateTime createdOn,
         List<NoteDto> notes
 ) {
 }

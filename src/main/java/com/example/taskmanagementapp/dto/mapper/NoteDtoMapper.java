@@ -3,6 +3,7 @@ package com.example.taskmanagementapp.dto.mapper;
 import com.example.taskmanagementapp.dto.NoteDto;
 import com.example.taskmanagementapp.model.Note;
 import com.example.taskmanagementapp.model.Task;
+import com.example.taskmanagementapp.model.User;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,6 +18,8 @@ public class NoteDtoMapper {
                 note.getId(),
                 note.getContent(),
                 note.getTask().getId(),
+                note.getUser().getId(),
+                note.getUser().getUsername(),
                 note.getCreatedOn()
         );
     }
@@ -31,6 +34,7 @@ public class NoteDtoMapper {
         return Note.builder()
                 .content(dto.content())
                 .task(Task.builder().id(dto.task()).build())
+                .user(User.builder().id(dto.userId()).build())
                 .build();
     }
 

@@ -25,6 +25,9 @@ public class Note {
     @ManyToOne(fetch = FetchType.LAZY)
     private Task task;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User user;
+
     @Column(name = "created_on", columnDefinition = "timestamp", nullable = false)
     private LocalDateTime createdOn;
 

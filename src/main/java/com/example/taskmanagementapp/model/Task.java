@@ -38,6 +38,10 @@ public class Task {
     @Column(name = "priority", nullable = false)
     private Priority priority;
 
+    @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
     @Column(name = "target_time")
     private LocalDateTime targetTime;
 

@@ -3,48 +3,52 @@
     <div class="col">
       <form [formGroup]="taskForm" (ngSubmit)="submitForm()">
         <label for="id">Id: </label>
-        <input class="form-control" type="text" id="id" name="id" value="{{ task.id }}" disabled /> <br/>
+        <input class="form-control mb-2" type="text" id="id" name="id" value="{{ task.id }}" disabled />
 
         <label for="title">Title: </label>
-        <input class="form-control" type="text" id="title" name="title" formControlName="title" />
-
-        <span class="text-danger" *ngIf="submitted && taskForm.get('title')?.hasError('required')">
+        <span class="text-danger me-0" *ngIf="submitted && taskForm.get('title')?.hasError('required')">
           {{ errors.title }}
-        </span> <br/>
+        </span>
+        <input class="form-control mb-2" type="text" id="title" name="title" formControlName="title" />
+
 
         <label for="description">Description: </label>
-        <textarea class="form-control" rows=5 id="description" name="description" formControlName="description"></textarea> <br/>
+        <textarea class="form-control mb-2" rows=5 id="description" name="description" formControlName="description"></textarea>
 
         <label for="category">Category: </label>
-        <select class="form-control" id="category" name="category"  formControlName="category">
+        <span class="text-danger" *ngIf="submitted && taskForm.get('category')?.hasError('required')">
+          {{ errors.category }}
+        </span>
+        <select class="form-control mb-2" id="category" name="category" formControlName="category">
           <option *ngFor="let category of categories" [ngValue]="category.id">{{ category.name }}</option>
         </select>
 
-        <span class="text-danger" *ngIf="submitted && taskForm.get('category')?.hasError('required')">
-          {{ errors.category }}
-        </span> <br/>
-
         <label for="priority">Priority: </label>
-        <select class="form-control" id="priority" name="priority" formControlName="priority">
+        <span class="text-danger" *ngIf="submitted && taskForm.get('priority')?.hasError('required')">
+          {{ errors.priority }}
+        </span>
+        <select class="form-control mb-2" id="priority" name="priority" formControlName="priority">
           <option value="LOW">Low</option>
           <option value="MEDIUM">Medium</option>
           <option value="HIGH">High</option>
         </select>
 
-        <span class="text-danger" *ngIf="submitted && taskForm.get('priority')?.hasError('required')">
-          {{ errors.priority }}
-        </span> <br/>
-
         <label for="status">Status: </label>
-        <select class="form-control" id="status" name="status" formControlName="status">
+        <select class="form-control mb-2" id="status" name="status" formControlName="status">
           <option value="NEW">New</option>
           <option value="IN_PROGRESS">In Progress</option>
           <option value="COMPLETED">Completed</option>
           <option value="CANCELLED">Cancelled</option>
-        </select> <br/>
+        </select>
+
+        <label for="user">Assigned user: </label>
+        <select class="form-control mb-2" id="user" name="user" formControlName="user">
+          <option [ngValue]="null">-</option>
+          <option *ngFor="let user of users" [ngValue]="user.id">{{ user.username }}</option>
+        </select>
 
         <label for="targetTime">Target time: </label>
-        <input class="form-control" type="datetime-local" id="targetTime" name="targetTime" formControlName="targetTime" /> <br/>
+        <input class="form-control mb-2" type="datetime-local" id="targetTime" name="targetTime" formControlName="targetTime" />
 
         <label for="createdOn">Creation time: </label>
         <input class="form-control" type="datetime-local" id="createdOn" name="createdOn" value="{{ task.createdOn }}" disabled /> <br/>

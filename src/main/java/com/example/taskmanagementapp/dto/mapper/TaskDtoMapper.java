@@ -4,6 +4,7 @@ import com.example.taskmanagementapp.dto.TaskDetailsDto;
 import com.example.taskmanagementapp.dto.TaskDto;
 import com.example.taskmanagementapp.model.Category;
 import com.example.taskmanagementapp.model.Task;
+import com.example.taskmanagementapp.model.User;
 
 public class TaskDtoMapper {
 
@@ -18,6 +19,8 @@ public class TaskDtoMapper {
                 task.getCategory().getId(),
                 task.getStatus(),
                 task.getPriority(),
+                task.getUser() != null ? task.getUser().getId() : null,
+                task.getUser() != null ? task.getUser().getUsername() : null,
                 task.getTargetTime());
     }
 
@@ -30,6 +33,8 @@ public class TaskDtoMapper {
                 task.getCategory().getName(),
                 task.getStatus(),
                 task.getPriority(),
+                task.getUser() != null ? task.getUser().getId() : null,
+                task.getUser() != null ? task.getUser().getUsername() : null,
                 task.getTargetTime(),
                 task.getCreatedOn(),
                 NoteDtoMapper.mapToNoteDtoList(task));
@@ -52,6 +57,7 @@ public class TaskDtoMapper {
         toUpdate.setCategory(Category.builder().id(taskDto.category()).build());
         toUpdate.setStatus(taskDto.status());
         toUpdate.setPriority(taskDto.priority());
+        toUpdate.setUser(taskDto.user() != null ? User.builder().id(taskDto.user()).build() : null);
         toUpdate.setTargetTime(taskDto.targetTime());
 
         return toUpdate;

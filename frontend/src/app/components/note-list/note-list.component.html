@@ -4,12 +4,14 @@
       <thead class="table-dark">
       <tr>
         <th>Notes</th>
+        <th>Author</th>
         <th>Creation time</th>
       </tr>
       </thead>
       <tbody>
       <tr *ngFor="let note of notes" (dblclick)="editNote(note.id)">
         <td class="col" title="{{ note.content }}">{{ note.content }}</td>
+        <td class="col-2" title="{{ note.username }}">{{ note.username }}</td>
         <td class="col-3"
             title="{{ note.createdOn |date : 'dd-MM-y HH:mm:ss' }}">{{ note.createdOn |date : "dd-MM-y HH:mm:ss" }}</td>
       </tr>
@@ -21,6 +23,7 @@
     No notes yet
   </div>
 </div>
+
 <div *ngIf="editMode">
   <form [formGroup]="noteForm" (ngSubmit)="submitForm()">
     <textarea class="form-control" id="content" name="content" rows="10" formControlName="content"></textarea>

@@ -8,6 +8,8 @@ export interface TaskDetailsModel {
   categoryName: string
   status: string
   priority: string
+  userId?: number
+  username?: string
   targetTime: string
   createdOn: string
   notes: NoteModel[]
