@@ -20,9 +20,9 @@ export class TaskService {
     sortOrder: string,
     idFilter?: string,
     titleFilter?: string,
+    userFilter?: string,
     statusFilter?: string,
-    priorityFilter?: string,
-    userFilter?: string
+    priorityFilter?: string
   ): Observable<any> {
     let params = new HttpParams()
       .set('page', page)
@@ -31,10 +31,10 @@ export class TaskService {
       .set('sortOrder', sortOrder)
       .set('id', idFilter || '')
       .set('title', titleFilter || '')
+      .set('user', userFilter || '')
       .set('status', statusFilter || '')
       .set('priority', priorityFilter || '')
-      .set('user', userFilter || '')
-
+    console.log(params)
     return this.http.get<TaskModel[]>(this.apiUrl + '/active', { params });
   }
 

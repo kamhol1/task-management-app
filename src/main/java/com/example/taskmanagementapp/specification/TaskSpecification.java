@@ -24,36 +24,46 @@ public class TaskSpecification implements Specification<Task> {
         List<Predicate> predicates = new ArrayList<>();
 
         for (SearchCriteria criteria : searchCriteriaList) {
-            if (criteria.getKey().equals("id")) {
-                predicates.add(
-                        criteriaBuilder.equal(root.get(criteria.getKey()), criteria.getValue())
+            String key = criteria.getKey();
+            Object value = criteria.getValue();
+
+            switch (key) {
+                case "id" -> predicates.add(
+                        criteriaBuilder.equal(root.get(key), value)
                 );
-            }
-            if (criteria.getKey().equals("title")) {
-                predicates.add(
+                case "title" -> predicates.add(
                         criteriaBuilder.like(
-                                criteriaBuilder.lower(root.get(criteria.getKey())), "%" + criteria.getValue().toString().toLowerCase() + "%"
+                                criteriaBuilder.lower(root.get(key)), "%" + value.toString().toLowerCase() + "%"
                         )
                 );
-            }
-            if (criteria.getKey().equals("status") || criteria.getKey().equals("priority")) {
-                predicates.add(
+                case "user" -> {
+                    if (!value.toString().isEmpty()) {
+                        predicates.add(
+                                criteriaBuilder.like(
+                                        criteriaBuilder.lower(root.get(key).get("username")), "%" + value.toString().toLowerCase() + "%"
+                                )
+                        );
+                    }
+                }
+                case "status", "priority" -> predicates.add(
                         criteriaBuilder.like(
-                                criteriaBuilder.lower(root.get(criteria.getKey()).as(String.class)), "%" + criteria.getValue().toString().toLowerCase() + "%"
+                                criteriaBuilder.lower(root.get(key).as(String.class)), "%" + value.toString().toLowerCase() + "%"
                         )
                 );
-            }
-            if (criteria.getKey().equals("excludeCompletedAndCancelled") && criteria.getValue().equals(true)) {
-                predicates.add(
-                        criteriaBuilder.notEqual(
-                                criteriaBuilder.lower(root.get("status").as(String.class)), Status.COMPLETED.toString().toLowerCase()
-                        )
-                );
-                predicates.add(
-                        criteriaBuilder.notEqual(
-                                criteriaBuilder.lower(root.get("status").as(String.class)), Status.CANCELLED.toString().toLowerCase()
-                        )
-                );
+                case "excludeCompletedAndCancelled" -> {
+                    if (value.equals(true)) {
+                        predicates.add(
+                                criteriaBuilder.notEqual(
+                                        criteriaBuilder.lower(root.get("status").as(String.class)), Status.COMPLETED.toString().toLowerCase()
+                                )
+                        );
+                        predicates.add(
+                                criteriaBuilder.notEqual(
+                                        criteriaBuilder.lower(root.get("status").as(String.class)), Status.CANCELLED.toString().toLowerCase()
+                                )
+                        );
+                    }
+                }
             }
         }
 

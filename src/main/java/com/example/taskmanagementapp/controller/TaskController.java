@@ -28,13 +28,14 @@ public class TaskController {
                                                     @RequestParam(required = false, defaultValue = "desc") String sortOrder,
                                                     @RequestParam(required = false, value = "id") Integer idFilter,
                                                     @RequestParam(required = false, value = "title") String titleFilter,
+                                                    @RequestParam(required = false, value = "user") String userFilter,
                                                     @RequestParam(required = false, value = "status") String statusFilter,
                                                     @RequestParam(required = false, value = "priority") String priorityFilter) {
         int pageNumber = page != null && page >= 0 ? page : 0;
         int pageSize = size != null && size >= 0 ? size : 10;
 
         return ResponseEntity.ok(
-                taskService.getAllActiveTasks(idFilter, titleFilter, statusFilter, priorityFilter, pageNumber, pageSize, sortField, sortOrder));
+                taskService.getAllActiveTasks(idFilter, titleFilter, userFilter, statusFilter, priorityFilter, pageNumber, pageSize, sortField, sortOrder));
     }
 
     @GetMapping("")
@@ -44,13 +45,14 @@ public class TaskController {
                                               @RequestParam(required = false, defaultValue = "desc") String sortOrder,
                                               @RequestParam(required = false, value = "id") Integer idFilter,
                                               @RequestParam(required = false, value = "title") String titleFilter,
+                                              @RequestParam(required = false, value = "user") String userFilter,
                                               @RequestParam(required = false, value = "status") String statusFilter,
                                               @RequestParam(required = false, value = "priority") String priorityFilter) {
         int pageNumber = page != null && page >= 0 ? page : 0;
         int pageSize = size != null && size >= 0 ? size : 10;
 
         return ResponseEntity.ok(
-                taskService.getAllTasks(idFilter, titleFilter, statusFilter, priorityFilter, pageNumber, pageSize, sortField, sortOrder));
+                taskService.getAllTasks(idFilter, titleFilter, userFilter, statusFilter, priorityFilter, pageNumber, pageSize, sortField, sortOrder));
     }
 
     @GetMapping("/{id}")

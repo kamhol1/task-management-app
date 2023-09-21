@@ -16,13 +16,19 @@ import java.util.Optional;
 @Repository
 public interface TaskRepository extends JpaRepository<Task, Integer>, JpaSpecificationExecutor<Task> {
 
+    @EntityGraph(
+            type = EntityGraph.EntityGraphType.FETCH,
+            attributePaths = "user"
+    )
     Page<Task> findAll(Specification<Task> spec, Pageable page);
 
     @EntityGraph(
             type = EntityGraph.EntityGraphType.FETCH,
             attributePaths = {
                     "category",
-                    "notes"
+                    "user",
+                    "notes",
+                    "notes.user"
             }
     )
     Optional<Task> findById(int id);

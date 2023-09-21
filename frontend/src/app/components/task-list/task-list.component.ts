@@ -23,9 +23,9 @@ export class TaskListComponent implements OnInit {
   sortOrder = "desc";
   idFilter = "";
   titleFilter = "";
-  statusFilter = "";
-  priorityFilter = "";
   userFilter = "";
+  statusFilter = "";
+  priorityFilter = ""
   searchTerms = new Subject<string>();
 
   constructor(private taskService: TaskService,
@@ -47,13 +47,19 @@ export class TaskListComponent implements OnInit {
           this.sortOrder,
           parsedFilters.idFilter,
           parsedFilters.titleFilter,
+          parsedFilters.userFilter,
           parsedFilters.statusFilter,
-          parsedFilters.priorityFilter,
-          parsedFilters.userFilter
+          parsedFilters.priorityFilter
         );
       },
       error: err => {
-        console.log(err);
+        this.snackBar.open(err.error.message,
+          'OK',
+          {
+            verticalPosition: 'top',
+            panelClass: ['app-notification-error'],
+            duration: 5000
+          });
       }
     });
 
@@ -64,6 +70,7 @@ export class TaskListComponent implements OnInit {
       this.sortOrder,
       this.idFilter,
       this.titleFilter,
+      this.userFilter,
       this.statusFilter,
       this.priorityFilter
     );
@@ -76,11 +83,11 @@ export class TaskListComponent implements OnInit {
     sortOrder: string,
     idFilter?: string,
     titleFilter?: string,
+    userFilter?: string,
     statusFilter?: string,
-    priorityFilter?: string,
-    userFilter?: string
+    priorityFilter?: string
   ) {
-    this.taskService.getTasks(page, size, sortField, sortOrder, idFilter, titleFilter, statusFilter, priorityFilter, userFilter)
+    this.taskService.getTasks(page, size, sortField, sortOrder, idFilter, titleFilter, userFilter, statusFilter, priorityFilter)
       .subscribe({
         next: data => {
           this.tasks = data.content;
@@ -111,9 +118,9 @@ export class TaskListComponent implements OnInit {
         this.sortOrder,
         this.idFilter,
         this.titleFilter,
+        this.userFilter,
         this.statusFilter,
-        this.priorityFilter,
-        this.userFilter
+        this.priorityFilter
       );
     }
   }
@@ -128,9 +135,9 @@ export class TaskListComponent implements OnInit {
         this.sortOrder,
         this.idFilter,
         this.titleFilter,
+        this.userFilter,
         this.statusFilter,
-        this.priorityFilter,
-        this.userFilter
+        this.priorityFilter
       );
     }
   }
@@ -149,9 +156,9 @@ export class TaskListComponent implements OnInit {
       this.sortOrder,
       this.idFilter,
       this.titleFilter,
+      this.userFilter,
       this.statusFilter,
-      this.priorityFilter,
-      this.userFilter
+      this.priorityFilter
     );
   }
 
@@ -159,9 +166,9 @@ export class TaskListComponent implements OnInit {
     const filters: TaskFilters = {
       idFilter: this.idFilter,
       titleFilter: this.titleFilter,
+      userFilter: this.userFilter,
       statusFilter: this.statusFilter,
-      priorityFilter: this.priorityFilter,
-      userFilter: this.userFilter
+      priorityFilter: this.priorityFilter
     };
 
     this.searchTerms.next(JSON.stringify(filters));
