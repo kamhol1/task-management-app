@@ -5,8 +5,8 @@ import com.example.taskmanagementapp.dto.TaskDto;
 import com.example.taskmanagementapp.exception.TaskNotFoundException;
 import com.example.taskmanagementapp.model.Category;
 import com.example.taskmanagementapp.model.Task;
+import com.example.taskmanagementapp.model.User;
 import com.example.taskmanagementapp.repository.TaskRepository;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -25,7 +25,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@Disabled //TODO: Fix tests
 @ExtendWith(MockitoExtension.class)
 class TaskServiceTest {
 
@@ -112,10 +111,21 @@ class TaskServiceTest {
     @Test
     void createTask_returnsTaskDto() {
         Task task = new Task();
-        Category category = mock(Category.class);
         task.setTitle("Title");
-        task.setCategory(category);
-        TaskDto dto = new TaskDto(null, task.getTitle(), task.getDescription(), task.getCategory().getId(), task.getStatus(), task.getPriority(), task.getUser().getId(), task.getUser().getUsername(), task.getTargetTime());
+        task.setCategory(mock(Category.class));
+        task.setUser(mock(User.class));
+
+        TaskDto dto = new TaskDto(
+                null,
+                task.getTitle(),
+                task.getDescription(),
+                task.getCategory().getId(),
+                task.getStatus(),
+                task.getPriority(),
+                task.getUser().getId(),
+                task.getUser().getUsername(),
+                task.getTargetTime()
+        );
 
         when(taskRepository.save(any())).thenReturn(task);
 
@@ -127,10 +137,21 @@ class TaskServiceTest {
     @Test
     void updateTask_returnsTaskDto() {
         Task task = new Task();
-        Category category = mock(Category.class);
         task.setTitle("Title");
-        task.setCategory(category);
-        TaskDto dto = new TaskDto(null, "Updated title", task.getDescription(), task.getCategory().getId(), task.getStatus(), task.getPriority(), task.getUser().getId(), task.getUser().getUsername(), task.getTargetTime());
+        task.setCategory(mock(Category.class));
+        task.setUser(mock(User.class));
+
+        TaskDto dto = new TaskDto(
+                null,
+                "Updated title",
+                task.getDescription(),
+                task.getCategory().getId(),
+                task.getStatus(),
+                task.getPriority(),
+                task.getUser().getId(),
+                task.getUser().getUsername(),
+                task.getTargetTime()
+        );
 
         when(taskRepository.findById(1)).thenReturn(Optional.of(task));
         when(taskRepository.save(any())).thenReturn(task);
