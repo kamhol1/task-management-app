@@ -2,8 +2,8 @@ package com.example.taskmanagementapp.service;
 
 import com.example.taskmanagementapp.dto.CredentialsDto;
 import com.example.taskmanagementapp.dto.SignUpDto;
+import com.example.taskmanagementapp.dto.UserAuthDto;
 import com.example.taskmanagementapp.dto.UserDto;
-import com.example.taskmanagementapp.dto.UserReadDto;
 import com.example.taskmanagementapp.dto.mapper.UserDtoMapper;
 import com.example.taskmanagementapp.exception.InvalidPasswordException;
 import com.example.taskmanagementapp.exception.PasswordsDoNotMatchException;
@@ -13,6 +13,8 @@ import com.example.taskmanagementapp.model.Role;
 import com.example.taskmanagementapp.model.User;
 import com.example.taskmanagementapp.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +24,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.example.taskmanagementapp.dto.mapper.SignUpDtoMapper.mapToUser;
-import static com.example.taskmanagementapp.dto.mapper.UserDtoMapper.mapToUserDto;
+import static com.example.taskmanagementapp.dto.mapper.UserDtoMapper.mapToUserAuthDto;
 
 @Service
 public class UserService {
@@ -35,21 +37,21 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public UserDto login(CredentialsDto credentialsDto) {
+    public UserAuthDto login(CredentialsDto credentialsDto) {
         User user = userRepository.findByUsername(credentialsDto.username())
                 .orElseThrow(UserNotFoundException::new);
 
         if (passwordEncoder.matches(CharBuffer.wrap(
                 credentialsDto.password()),
                 user.getPassword())) {
-            return mapToUserDto(user);
+            return mapToUserAuthDto(user);
         }
 
         throw new InvalidPasswordException();
     }
 
     @Transactional
-    public UserDto register(SignUpDto signUpDto) {
+    public UserAuthDto register(SignUpDto signUpDto) {
         if (!Arrays.equals(signUpDto.password(), signUpDto.passwordConfirmation())) {
             throw new PasswordsDoNotMatchException();
         }
@@ -65,12 +67,22 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(CharBuffer.wrap(signUpDto.password())));
         User created = userRepository.save(user);
 
-        return mapToUserDto(created);
+        return mapToUserAuthDto(created);
     }
 
-    public List<UserReadDto> getUsers() {
+    public User getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserAuthDto currentUser = (UserAuthDto) authentication.getPrincipal();
+
+        return userRepository.findByUsername(currentUser.getUsername()).orElseThrow(() -> {
+            throw new UserNotFoundException();
+        });
+    }
+
+    public List<UserDto> getUsers() {
         return userRepository.findAll().stream()
-                .map(UserDtoMapper::mapToUserReadDto)
+                .map(UserDtoMapper::mapToUserDto)
                 .toList();
     }
+
 }

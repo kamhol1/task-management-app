@@ -27,7 +27,13 @@ export class CategoryListComponent implements OnInit {
           this.categories = categories;
         },
         error: err => {
-          console.log(err);
+          this.snackBar.open(err.error.message,
+            'OK',
+            {
+              verticalPosition: 'top',
+              panelClass: ['app-notification-error'],
+              duration: 5000
+            });
         }
       });
   }

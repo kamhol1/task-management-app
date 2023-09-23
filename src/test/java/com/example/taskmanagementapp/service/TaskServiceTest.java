@@ -34,6 +34,9 @@ class TaskServiceTest {
     @InjectMocks
     private TaskService taskService;
 
+    @Mock
+    private UserService userService;
+
     @Test
     void getAllActiveTasks_returnsEmptyPage() {
         when(taskRepository.findAll(Mockito.<Specification<Task>>any(), Mockito.<Pageable>any()))
@@ -113,21 +116,26 @@ class TaskServiceTest {
         Task task = new Task();
         task.setTitle("Title");
         task.setCategory(mock(Category.class));
-        task.setUser(mock(User.class));
+
+        User user = User.builder()
+                .username("username")
+                .build();
 
         TaskDto dto = new TaskDto(
-                null,
+                task.getId(),
                 task.getTitle(),
                 task.getDescription(),
                 task.getCategory().getId(),
                 task.getStatus(),
                 task.getPriority(),
-                task.getUser().getId(),
-                task.getUser().getUsername(),
+                null,
+                null,
                 task.getTargetTime()
         );
 
+
         when(taskRepository.save(any())).thenReturn(task);
+        when(userService.getCurrentUser()).thenReturn(user);
 
         TaskDto created = taskService.createTask(dto);
         assertEquals(dto, created);
@@ -139,10 +147,16 @@ class TaskServiceTest {
         Task task = new Task();
         task.setTitle("Title");
         task.setCategory(mock(Category.class));
-        task.setUser(mock(User.class));
+
+        User user = User.builder()
+                .id(1)
+                .username("username")
+                .build();
+
+        task.setUser(user);
 
         TaskDto dto = new TaskDto(
-                null,
+                task.getId(),
                 "Updated title",
                 task.getDescription(),
                 task.getCategory().getId(),
@@ -155,6 +169,7 @@ class TaskServiceTest {
 
         when(taskRepository.findById(1)).thenReturn(Optional.of(task));
         when(taskRepository.save(any())).thenReturn(task);
+        when(userService.getCurrentUser()).thenReturn(user);
 
         assertEquals(dto, taskService.updateTask(1, dto));
         verify(taskRepository).save(any());

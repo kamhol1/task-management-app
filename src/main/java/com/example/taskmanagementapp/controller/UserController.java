@@ -1,7 +1,7 @@
 package com.example.taskmanagementapp.controller;
 
+import com.example.taskmanagementapp.dto.UserAuthDto;
 import com.example.taskmanagementapp.dto.UserDto;
-import com.example.taskmanagementapp.dto.UserReadDto;
 import com.example.taskmanagementapp.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -23,7 +23,7 @@ public class UserController {
     }
 
     @GetMapping("")
-    ResponseEntity<List<UserReadDto>> getUsers() {
+    ResponseEntity<List<UserDto>> getUsers() {
         return ResponseEntity.ok(
                 userService.getUsers());
     }

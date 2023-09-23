@@ -157,6 +157,15 @@ export class TaskDetailsComponent implements OnInit {
         },
         error: err => {
           this.errors = err.error;
+          if (err.error.message) {
+            this.snackBar.open(err.error.message,
+              'OK',
+              {
+                verticalPosition: 'top',
+                panelClass: ['app-notification-error'],
+                duration: 5000
+              });
+          }
         }
       });
   }

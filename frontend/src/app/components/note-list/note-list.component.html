@@ -25,15 +25,22 @@
 </div>
 
 <div *ngIf="editMode">
-  <form [formGroup]="noteForm" (ngSubmit)="submitForm()">
-    <textarea class="form-control" id="content" name="content" rows="10" formControlName="content"></textarea>
-    <button class="btn btn-primary mt-1" type="submit">
-      <i class="bi bi-check2 mr-2"></i>Save
+  <div *ngIf="isOwner">
+    <form [formGroup]="noteForm" (ngSubmit)="submitForm()">
+      <textarea class="form-control" id="content" name="content" rows="10" formControlName="content"></textarea>
+      <button class="btn btn-primary mt-1" type="submit">
+        <i class="bi bi-check2 mr-2"></i>Save
+      </button>
+    </form>
+    <button class="btn btn-danger mt-1" (click)="deleteNote(note.id)">
+      <i class="bi bi-x mr-2"></i>Delete
     </button>
-  </form>
-  <button class="btn btn-danger mt-1" (click)="deleteNote(note.id)">
-    <i class="bi bi-x mr-2"></i>Delete
-  </button> <br/>
+  </div>
+
+  <div *ngIf="!isOwner">
+    <textarea class="form-control" rows="10" disabled>{{ note.content }}</textarea>
+  </div> <br/>
+
   <button class="btn btn-secondary mt-3" (click)="listNotes()">
     <i class="bi bi-arrow-left mr-2"></i>Back
   </button>

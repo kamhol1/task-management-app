@@ -4,9 +4,8 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.example.taskmanagementapp.dto.UserDto;
+import com.example.taskmanagementapp.dto.UserAuthDto;
 import com.example.taskmanagementapp.model.Role;
-import com.example.taskmanagementapp.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -29,7 +28,7 @@ public class UserAuthProvider {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
-    public String createToken(UserDto user) {
+    public String createToken(UserAuthDto user) {
         Date now = new Date();
         Date validity = new Date(now.getTime() + 3_600_000);
 
@@ -52,7 +51,7 @@ public class UserAuthProvider {
 
         DecodedJWT decoded = verifier.verify(token);
 
-        UserDto user = UserDto.builder()
+        UserAuthDto user = UserAuthDto.builder()
                 .username(decoded.getSubject())
                 .firstName(decoded.getClaim("firstName").asString())
                 .lastName(decoded.getClaim("lastName").asString())

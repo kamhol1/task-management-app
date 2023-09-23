@@ -1,19 +1,13 @@
 package com.example.taskmanagementapp.service;
 
 import com.example.taskmanagementapp.dto.NoteDto;
-import com.example.taskmanagementapp.dto.UserDto;
+import com.example.taskmanagementapp.exception.AccessDeniedException;
 import com.example.taskmanagementapp.exception.NoteNotFoundException;
-import com.example.taskmanagementapp.exception.UserNotFoundException;
 import com.example.taskmanagementapp.model.Note;
 import com.example.taskmanagementapp.model.User;
 import com.example.taskmanagementapp.repository.NoteRepository;
-import com.example.taskmanagementapp.repository.UserRepository;
 import jakarta.transaction.Transactional;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 import static com.example.taskmanagementapp.dto.mapper.NoteDtoMapper.*;
 
@@ -21,11 +15,11 @@ import static com.example.taskmanagementapp.dto.mapper.NoteDtoMapper.*;
 public class NoteService {
 
     private final NoteRepository noteRepository;
-    private final UserRepository userRepository;
+    private final UserService userService;
 
-    public NoteService(NoteRepository noteRepository, UserRepository userRepository) {
+    public NoteService(NoteRepository noteRepository, UserService userService) {
         this.noteRepository = noteRepository;
-        this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     public NoteDto getNote(int id) {
@@ -36,24 +30,26 @@ public class NoteService {
 
     @Transactional
     public int createNote(NoteDto noteDto) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDto currentUser = (UserDto) authentication.getPrincipal();
-        User user = userRepository.findByUsername(currentUser.getUsername()).orElseThrow(() -> {
-            throw new UserNotFoundException();
-        });
+        User user = userService.getCurrentUser();
 
-        //TODO: Replace record with class
-        NoteDto toSave = new NoteDto(noteDto.id(), noteDto.content(), noteDto.task(), user.getId(), user.getUsername(), noteDto.createdOn());
+        Note toSave = mapToNoteCreate(noteDto);
+        toSave.setUser(user);
 
-        Note created = noteRepository.save(mapToNoteCreate(toSave));
+        Note created = noteRepository.save(toSave);
         return created.getId();
     }
 
     @Transactional
     public int updateNote(int id, NoteDto noteDto) {
+        User user = userService.getCurrentUser();
+
         Note toUpdate = noteRepository.findById(id).orElseThrow(
                 () -> new NoteNotFoundException(id)
         );
+
+        if (!toUpdate.getUser().getId().equals(user.getId())) {
+            throw new AccessDeniedException("You do not have permission to edit this note");
+        }
 
         noteRepository.save(mapToNoteUpdate(noteDto, toUpdate));
         return id;
@@ -61,9 +57,15 @@ public class NoteService {
 
     @Transactional
     public int deleteNote(int id) {
+        User user = userService.getCurrentUser();
+
         Note toDelete = noteRepository.findById(id).orElseThrow(
                 () -> new NoteNotFoundException(id)
         );
+
+        if (!toDelete.getUser().getId().equals(user.getId())) {
+            throw new AccessDeniedException("You do not have permission to delete this note");
+        }
 
         noteRepository.delete(toDelete);
         return id;

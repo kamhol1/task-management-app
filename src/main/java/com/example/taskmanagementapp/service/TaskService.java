@@ -3,9 +3,11 @@ package com.example.taskmanagementapp.service;
 import com.example.taskmanagementapp.dto.TaskDetailsDto;
 import com.example.taskmanagementapp.dto.TaskDto;
 import com.example.taskmanagementapp.dto.mapper.TaskDtoMapper;
+import com.example.taskmanagementapp.exception.AccessDeniedException;
 import com.example.taskmanagementapp.exception.TaskNotFoundException;
 import com.example.taskmanagementapp.model.Status;
 import com.example.taskmanagementapp.model.Task;
+import com.example.taskmanagementapp.model.User;
 import com.example.taskmanagementapp.repository.TaskRepository;
 import com.example.taskmanagementapp.specification.SearchCriteria;
 import com.example.taskmanagementapp.specification.TaskSpecification;
@@ -17,16 +19,17 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-import static com.example.taskmanagementapp.dto.mapper.TaskDtoMapper.mapToTaskDetailsDto;
-import static com.example.taskmanagementapp.dto.mapper.TaskDtoMapper.mapToTaskDto;
+import static com.example.taskmanagementapp.dto.mapper.TaskDtoMapper.*;
 
 @Service
 public class TaskService {
 
     private final TaskRepository taskRepository;
+    private final UserService userService;
 
-    TaskService(TaskRepository taskRepository) {
+    TaskService(TaskRepository taskRepository, UserService userService) {
         this.taskRepository = taskRepository;
+        this.userService = userService;
     }
 
     public Page<TaskDto> getAllActiveTasks(
@@ -73,8 +76,11 @@ public class TaskService {
 
     @Transactional
     public TaskDto createTask(TaskDto taskDto) {
+        User user = userService.getCurrentUser();
+
         Task toSave = TaskDtoMapper.mapToTaskCreate(taskDto);
         toSave.setStatus(Status.NEW);
+        toSave.setUser(user);
 
         Task created = taskRepository.save(toSave);
         return mapToTaskDto(created);
@@ -82,11 +88,17 @@ public class TaskService {
 
     @Transactional
     public TaskDto updateTask(int id, TaskDto taskDto) {
+        User user = userService.getCurrentUser();
+
         Task toUpdate = taskRepository.findById(id).orElseThrow(
                 () -> new TaskNotFoundException(id)
         );
 
-        Task updated = taskRepository.save(TaskDtoMapper.mapToTaskUpdate(taskDto, toUpdate));
+        if (toUpdate.getUser() != null && !toUpdate.getUser().getId().equals(user.getId())) {
+            throw new AccessDeniedException("You do not have permission to edit this task");
+        }
+
+        Task updated = taskRepository.save(mapToTaskUpdate(taskDto, toUpdate));
         return mapToTaskDto(updated);
     }
 

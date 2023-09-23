@@ -3,6 +3,7 @@ import {NoteModel} from "../../models/note.model";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {NoteService} from "../../services/note/note.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {AuthService} from "../../services/auth/auth.service";
 
 @Component({
   selector: 'app-note-list',
@@ -13,10 +14,12 @@ export class NoteListComponent {
   @Input()
   notes: NoteModel[] = [];
   editMode: boolean = false;
+  isOwner: boolean = false;
   noteForm!: FormGroup;
   note!: NoteModel;
 
   constructor(private noteService: NoteService,
+              private authService: AuthService,
               private snackBar: MatSnackBar,
               private formBuilder: FormBuilder) {
     this.noteForm = this.formBuilder.group({
@@ -31,6 +34,8 @@ export class NoteListComponent {
       .subscribe({
         next: note => {
           this.note = note;
+          this.isOwner = this.note.username == this.authService.userData.username;
+
           this.noteForm = this.formBuilder.group({
             content: [note.content, Validators.required]
           });

@@ -34,7 +34,7 @@ export class TaskService {
       .set('user', userFilter || '')
       .set('status', statusFilter || '')
       .set('priority', priorityFilter || '')
-    console.log(params)
+
     return this.http.get<TaskModel[]>(this.apiUrl + '/active', { params });
   }
 

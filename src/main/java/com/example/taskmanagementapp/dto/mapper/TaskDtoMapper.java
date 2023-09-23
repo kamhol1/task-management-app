@@ -57,7 +57,7 @@ public class TaskDtoMapper {
         toUpdate.setCategory(Category.builder().id(taskDto.category()).build());
         toUpdate.setStatus(taskDto.status());
         toUpdate.setPriority(taskDto.priority());
-        toUpdate.setUser(taskDto.user() != null ? User.builder().id(taskDto.user()).build() : null);
+        toUpdate.setUser(taskDto.user() != null ? User.builder().id(taskDto.user()).username(taskDto.username()).build() : null);
         toUpdate.setTargetTime(taskDto.targetTime());
 
         return toUpdate;

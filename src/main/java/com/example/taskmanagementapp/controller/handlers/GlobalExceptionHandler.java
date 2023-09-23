@@ -32,6 +32,11 @@ public class GlobalExceptionHandler {
         return buildResponseBodyWithStatus(e, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<Map<String, Object>> handleAccessDeniedException(RuntimeException e) {
+        return buildResponseBodyWithStatus(e, HttpStatus.FORBIDDEN);
+    }
+
     private ResponseEntity<Map<String, Object>> buildResponseBodyWithStatus(Exception e, HttpStatus httpStatus) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", LocalDateTime.now());

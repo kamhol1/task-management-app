@@ -1,7 +1,7 @@
 package com.example.taskmanagementapp.service;
 
 import com.example.taskmanagementapp.dto.NoteDto;
-import com.example.taskmanagementapp.dto.UserDto;
+import com.example.taskmanagementapp.dto.UserAuthDto;
 import com.example.taskmanagementapp.exception.NoteNotFoundException;
 import com.example.taskmanagementapp.model.Note;
 import com.example.taskmanagementapp.model.Task;
@@ -36,7 +36,7 @@ class NoteServiceTest {
     private NoteService noteService;
 
     @Mock
-    private UserRepository userRepository;
+    private UserService userService;
 
     @Test
     void getNote_returnsNoteDto() {
@@ -81,20 +81,8 @@ class NoteServiceTest {
                 .username("username")
                 .build();
 
-        UserDto userDto = UserDto.builder()
-                .username(user.getUsername())
-                .build();
-
-        Authentication authentication = new UsernamePasswordAuthenticationToken(
-                userDto, null, Collections.emptyList()
-        );
-
-        SecurityContext securityContext = new SecurityContextImpl();
-        securityContext.setAuthentication(authentication);
-        SecurityContextHolder.setContext(securityContext);
-
-        when(userRepository.findByUsername(userDto.getUsername())).thenReturn(Optional.of(user));
         when(noteRepository.save(any())).thenReturn(note);
+        when(userService.getCurrentUser()).thenReturn(user);
 
         assertEquals(1, noteService.createNote(dto));
         verify(noteRepository).save(any());
@@ -106,18 +94,26 @@ class NoteServiceTest {
         note.setId(1);
         note.setContent("Content");
         note.setTask(mock(Task.class));
-        note.setUser(mock(User.class));
+
+        User user = User.builder()
+                .id(1)
+                .username("username")
+                .build();
+
+        note.setUser(user);
 
         NoteDto dto = new NoteDto(
                 note.getId(),
                 note.getContent(),
                 note.getTask().getId(),
-                note.getUser() != null ? note.getUser().getId() : null,
-                note.getUser() != null ? note.getUser().getUsername() : null,
-                note.getCreatedOn());
+                note.getUser().getId(),
+                note.getUser().getUsername(),
+        note.getCreatedOn());
+
 
         when(noteRepository.findById(1)).thenReturn(Optional.of(note));
         when(noteRepository.save(any())).thenReturn(note);
+        when(userService.getCurrentUser()).thenReturn(user);
 
         assertEquals(1, noteService.updateNote(1, dto));
         verify(noteRepository).findById(1);
@@ -139,7 +135,15 @@ class NoteServiceTest {
         Note note = new Note();
         note.setId(1);
 
+        User user = User.builder()
+                .id(1)
+                .username("username")
+                .build();
+
+        note.setUser(user);
+
         when(noteRepository.findById(1)).thenReturn(Optional.of(note));
+        when(userService.getCurrentUser()).thenReturn(user);
 
         int deletedId = noteService.deleteNote(1);
         assertEquals(1, deletedId);

@@ -1,6 +1,5 @@
 package com.example.taskmanagementapp.repository;
 
-import com.example.taskmanagementapp.dto.UserDto;
 import com.example.taskmanagementapp.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
