@@ -7,12 +7,14 @@ import {CategoryListComponent} from "./components/category-list/category-list.co
 import {LoginFormComponent} from "./components/login-form/login-form.component";
 import {RegisterFormComponent} from "./components/register-form/register-form.component";
 import {AuthGuard} from "./services/auth/auth.guard";
+import {UserListComponent} from "./components/user-list/user-list.component";
 
 const routes: Routes = [
   { path: '', component: TaskListComponent, canActivate: [AuthGuard] },
   { path: 'task/:id', component: TaskDetailsComponent, canActivate: [AuthGuard] },
   { path: 'add', component: TaskAddComponent, canActivate: [AuthGuard] },
   { path: 'categories', component: CategoryListComponent, canActivate: [AuthGuard], data: { role: ['ADMIN'] } },
+  { path: 'users', component: UserListComponent, canActivate: [AuthGuard], data: { role: ['ADMIN'] } },
   { path: 'login', component: LoginFormComponent },
   { path: 'register', component: RegisterFormComponent }
 ];

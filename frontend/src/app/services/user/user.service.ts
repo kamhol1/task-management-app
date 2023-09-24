@@ -12,7 +12,19 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
+  getUsersAsListItems(): Observable<UserModel[]> {
+    return this.http.get<UserModel[]>(this.apiUrl + '/list');
+  }
+
   getUsers(): Observable<UserModel[]> {
     return this.http.get<UserModel[]>(this.apiUrl);
+  }
+
+  updateUser(user: UserModel): Observable<any> {
+    return this.http.put(this.apiUrl + '/' + user.id, user);
+  }
+
+  toggleUserEnabled(id: number): Observable<any> {
+    return this.http.patch(this.apiUrl + '/' + id + '/toggle', id)
   }
 }

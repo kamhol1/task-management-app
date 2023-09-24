@@ -1,26 +1,28 @@
 import {Component, OnInit} from '@angular/core';
-import {CategoryModel} from "../../models/category.model";
-import {CategoryService} from "../../services/category/category.service";
+import {UserService} from "../../services/user/user.service";
+import {UserModel} from "../../models/user.model";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {Router} from "@angular/router";
 
 @Component({
-  selector: 'app-category-list',
-  templateUrl: './category-list.component.html',
-  styleUrls: ['./category-list.component.css']
+  selector: 'app-user-list',
+  templateUrl: './user-list.component.html',
+  styleUrls: ['./user-list.component.css']
 })
-export class CategoryListComponent implements OnInit {
-  categories: CategoryModel[] = [];
+export class UserListComponent implements OnInit {
 
-  constructor(private categoryService: CategoryService,
+  users: UserModel[] = [];
+
+  constructor(private userService: UserService,
               private snackBar: MatSnackBar,
-              private router: Router) { }
+              private router: Router) {
+  }
 
   ngOnInit(): void {
-    this.categoryService.getNotHiddenCategories()
+    this.userService.getUsers()
       .subscribe({
-        next: categories => {
-          this.categories = categories;
+        next: users => {
+          this.users = users;
         },
         error: err => {
           this.snackBar.open(err.error.message,
@@ -34,11 +36,11 @@ export class CategoryListComponent implements OnInit {
       });
   }
 
-  updateCategory(category: CategoryModel) {
-    const confirmUpdate = confirm('Are you sure you want to update the category #' + category.id + '?');
+  updateUser(user: UserModel) {
+    const confirmUpdate = confirm('Are you sure you want to update the user #' + user.id + '?');
 
     if (confirmUpdate) {
-      this.categoryService.updateCategory(category)
+      this.userService.updateUser(user)
         .subscribe({
           next: res => {
             this.snackBar.open(res.message,
@@ -50,10 +52,10 @@ export class CategoryListComponent implements OnInit {
               });
             this.router.routeReuseStrategy.shouldReuseRoute = () => false;
             this.router.onSameUrlNavigation = 'reload';
-            this.router.navigate(['./categories'])
+            this.router.navigate(['./users'])
           },
           error: err => {
-            this.snackBar.open(err.error.name,
+            this.snackBar.open(err.error.username,
               'OK',
               {
                 verticalPosition: 'top',
@@ -65,11 +67,15 @@ export class CategoryListComponent implements OnInit {
     }
   }
 
-  hideCategory(category: CategoryModel) {
-    const confirmDelete = confirm('Are you sure you want to delete "' + category.name + '" category?');
+  toggleUserEnabled(user: UserModel) {
+    const message = user.enabled ?
+      'Are you sure you want to disable the user "' + user.username + '"?' :
+      'Are you sure you want to enable the user "' + user.username + '"?'
 
-    if (confirmDelete) {
-      this.categoryService.hideCategory(category.id)
+    const confirmToggle = confirm(message);
+
+    if (confirmToggle) {
+      this.userService.toggleUserEnabled(user.id)
         .subscribe({
           next: res => {
             this.snackBar.open(res.message,
@@ -81,7 +87,7 @@ export class CategoryListComponent implements OnInit {
               });
             this.router.routeReuseStrategy.shouldReuseRoute = () => false;
             this.router.onSameUrlNavigation = 'reload';
-            this.router.navigate(['./categories'])
+            this.router.navigate(['./users'])
           },
           error: err => {
             this.snackBar.open(err.error.message,
@@ -92,7 +98,7 @@ export class CategoryListComponent implements OnInit {
                 duration: 5000
               });
           }
-        });
+        })
     }
   }
 }

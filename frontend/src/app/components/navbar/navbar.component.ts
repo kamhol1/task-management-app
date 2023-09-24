@@ -8,10 +8,16 @@ import {AuthService} from "../../services/auth/auth.service";
 })
 export class NavbarComponent {
 
+  loggedIn: boolean = false;
   admin: boolean = false;
 
   constructor(private authService: AuthService) {
     this.admin = authService.userData.role == 'ADMIN';
+    this.loggedIn = authService.isLoggedIn();
+  }
+
+  isLoggedIn(): boolean {
+    return this.loggedIn;
   }
 
   isAdmin(): boolean {

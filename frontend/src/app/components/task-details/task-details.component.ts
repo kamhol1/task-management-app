@@ -80,7 +80,7 @@ export class TaskDetailsComponent implements OnInit {
         }
       });
 
-    this.userService.getUsers()
+    this.userService.getUsersAsListItems()
       .subscribe({
         next: users => {
           this.users = users;

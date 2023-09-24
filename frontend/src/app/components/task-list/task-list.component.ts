@@ -171,6 +171,7 @@ export class TaskListComponent implements OnInit {
       priorityFilter: this.priorityFilter
     };
 
+    this.page = 0;
     this.searchTerms.next(JSON.stringify(filters));
   }
 }

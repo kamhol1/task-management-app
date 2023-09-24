@@ -35,7 +35,7 @@ public class CategoryController {
     @PutMapping("/{id}")
     ResponseEntity<MessageResponse> updateCategory(@PathVariable int id, @Valid @RequestBody CategoryDto categoryDto) {
         CategoryDto updated = categoryService.updateCategory(id, categoryDto);
-        return ResponseEntity.ok(new MessageResponse("Category with id " + updated.id() + " has been updated successfully"));
+        return ResponseEntity.ok(new MessageResponse("Category with id " + updated.id() + " updated successfully"));
     }
 
     @PatchMapping("/{id}/hide")

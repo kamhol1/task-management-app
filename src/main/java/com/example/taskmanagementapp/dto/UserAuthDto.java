@@ -16,5 +16,6 @@ public class UserAuthDto {
     private String lastName;
     private String username;
     private Role role;
+    private boolean enabled;
     private String token;
 }

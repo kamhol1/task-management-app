@@ -2,6 +2,7 @@ package com.example.taskmanagementapp.dto.mapper;
 
 import com.example.taskmanagementapp.dto.UserAuthDto;
 import com.example.taskmanagementapp.dto.UserDto;
+import com.example.taskmanagementapp.dto.UserListItemDto;
 import com.example.taskmanagementapp.model.User;
 
 public class UserDtoMapper {
@@ -15,8 +16,19 @@ public class UserDtoMapper {
                 user.getFirstName(),
                 user.getLastName(),
                 user.getUsername(),
-                user.getRole()
+                user.getRole(),
+                user.isEnabled()
         );
+    }
+
+    public static User mapToUserUpdate(UserDto dto, User toUpdate) {
+        toUpdate.setFirstName(dto.firstName());
+        toUpdate.setLastName(dto.lastName());
+        toUpdate.setUsername(dto.username());
+        toUpdate.setRole(dto.role());
+        toUpdate.setEnabled(dto.enabled());
+
+        return toUpdate;
     }
 
     public static UserAuthDto mapToUserAuthDto(User user) {
@@ -25,6 +37,14 @@ public class UserDtoMapper {
                 .lastName(user.getLastName())
                 .username(user.getUsername())
                 .role(user.getRole())
+                .enabled(user.isEnabled())
                 .build();
+    }
+
+    public static UserListItemDto mapToUserListItemDto(User user) {
+        return new UserListItemDto(
+                user.getId(),
+                user.getUsername()
+        );
     }
 }

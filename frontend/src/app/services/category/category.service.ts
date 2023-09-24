@@ -16,7 +16,7 @@ export class CategoryService {
     return this.http.get<CategoryModel[]>(this.apiUrl + '/active');
   }
 
-  saveCategory(category: CategoryModel): Observable<any> {
+  createCategory(category: CategoryModel): Observable<any> {
     return this.http.post(this.apiUrl, category);
   }
 
@@ -24,7 +24,7 @@ export class CategoryService {
     return this.http.put(this.apiUrl + '/' + category.id, category);
   }
 
-  hideCategory(category: CategoryModel): Observable<any> {
-    return this.http.patch(this.apiUrl + '/' + category.id + '/hide', category.id);
+  hideCategory(id: number): Observable<any> {
+    return this.http.patch(this.apiUrl + '/' + id + '/hide', id);
   }
 }

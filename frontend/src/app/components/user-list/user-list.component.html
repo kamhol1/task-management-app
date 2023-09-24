@@ -1,0 +1,41 @@
+<div>
+  <table class="table m-auto">
+    <thead class="table-dark">
+    <tr>
+      <th>Id</th>
+      <th>First name</th>
+      <th>Last name</th>
+      <th>Username</th>
+      <th>Role</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let user of users">
+      <td class="col-1">
+        <input class="form-control w-100" type="text" value="{{ user.id }}" disabled />
+      </td>
+      <td class="col">
+        <input class="form-control w-100" type="text" [(ngModel)]="user.firstName" value="{{ user.firstName }}">
+      </td>
+      <td class="col">
+        <input class="form-control w-100" type="text" [(ngModel)]="user.lastName" value="{{ user.lastName }}">
+      </td>
+      <td class="col">
+        <input class="form-control w-100" type="text" [(ngModel)]="user.username" value="{{ user.username }}">
+      </td>
+      <td class="col">
+        <select class="form-control" [value]="user.role" [(ngModel)]="user.role">
+          <option value="USER">User</option>
+          <option value="ADMIN">Admin</option>
+        </select>
+      </td>
+      <td class="col-2">
+        <button class="btn btn-primary py-1 me-3" (click)="updateUser(user)">Save</button>
+        <button class="btn btn-danger py-1" *ngIf="user.enabled == true" (click)="toggleUserEnabled(user)">Disable</button>
+        <button class="btn btn-success py-1" *ngIf="user.enabled == false" (click)="toggleUserEnabled(user)">Enable</button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>

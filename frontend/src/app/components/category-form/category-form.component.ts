@@ -33,7 +33,7 @@ export class CategoryFormComponent {
       name: formData.name
     };
 
-    this.categoryService.saveCategory(newCategory)
+    this.categoryService.createCategory(newCategory)
       .subscribe({
         next: res => {
           this.snackBar.open(res.message,

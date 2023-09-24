@@ -1,9 +1,6 @@
 package com.example.taskmanagementapp.service;
 
-import com.example.taskmanagementapp.dto.CredentialsDto;
-import com.example.taskmanagementapp.dto.SignUpDto;
-import com.example.taskmanagementapp.dto.UserAuthDto;
-import com.example.taskmanagementapp.dto.UserDto;
+import com.example.taskmanagementapp.dto.*;
 import com.example.taskmanagementapp.dto.mapper.UserDtoMapper;
 import com.example.taskmanagementapp.exception.InvalidPasswordException;
 import com.example.taskmanagementapp.exception.PasswordsDoNotMatchException;
@@ -24,7 +21,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.example.taskmanagementapp.dto.mapper.SignUpDtoMapper.mapToUser;
-import static com.example.taskmanagementapp.dto.mapper.UserDtoMapper.mapToUserAuthDto;
+import static com.example.taskmanagementapp.dto.mapper.UserDtoMapper.*;
 
 @Service
 public class UserService {
@@ -40,6 +37,10 @@ public class UserService {
     public UserAuthDto login(CredentialsDto credentialsDto) {
         User user = userRepository.findByUsername(credentialsDto.username())
                 .orElseThrow(UserNotFoundException::new);
+
+        if (!user.isEnabled()) {
+            throw new UserNotFoundException();
+        }
 
         if (passwordEncoder.matches(CharBuffer.wrap(
                 credentialsDto.password()),
@@ -64,6 +65,7 @@ public class UserService {
 
         User user = mapToUser(signUpDto);
         user.setRole(Role.USER);
+        user.setEnabled(true);
         user.setPassword(passwordEncoder.encode(CharBuffer.wrap(signUpDto.password())));
         User created = userRepository.save(user);
 
@@ -74,9 +76,14 @@ public class UserService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserAuthDto currentUser = (UserAuthDto) authentication.getPrincipal();
 
-        return userRepository.findByUsername(currentUser.getUsername()).orElseThrow(() -> {
-            throw new UserNotFoundException();
-        });
+        return userRepository.findByUsername(currentUser.getUsername())
+                .orElseThrow(UserNotFoundException::new);
+    }
+
+    public List<UserListItemDto> getUsersAsListItems() {
+        return userRepository.findAll().stream()
+                .map(UserDtoMapper::mapToUserListItemDto)
+                .toList();
     }
 
     public List<UserDto> getUsers() {
@@ -85,4 +92,20 @@ public class UserService {
                 .toList();
     }
 
+    public UserDto updateUser(int id, UserDto userDto) {
+        User toUpdate = userRepository.findById(id)
+                .orElseThrow(UserNotFoundException::new);
+
+        User updated = userRepository.save(mapToUserUpdate(userDto, toUpdate));
+        return mapToUserDto(updated);
+    }
+
+    public UserDto toggleUserEnabled(int id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(UserNotFoundException::new);
+        user.setEnabled(!user.isEnabled());
+
+        User updated = userRepository.save(user);
+        return mapToUserDto(updated);
+    }
 }

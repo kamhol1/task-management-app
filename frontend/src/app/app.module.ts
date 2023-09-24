@@ -16,11 +16,11 @@ import {CategoryListComponent} from './components/category-list/category-list.co
 import {CategoryFormComponent} from './components/category-form/category-form.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatSnackBarModule} from "@angular/material/snack-bar";
-import { AuthComponent } from './components/auth/auth.component';
-import { LoginFormComponent } from './components/login-form/login-form.component';
-import { RegisterFormComponent } from './components/register-form/register-form.component';
+import {AuthComponent} from './components/auth/auth.component';
+import {LoginFormComponent} from './components/login-form/login-form.component';
+import {RegisterFormComponent} from './components/register-form/register-form.component';
 import {TokenInterceptorService} from "./interceptors/token-interceptor.service";
-import {AuthGuard} from "./services/auth/auth.guard";
+import {UserListComponent} from './components/user-list/user-list.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +36,8 @@ import {AuthGuard} from "./services/auth/auth.guard";
     CategoryFormComponent,
     AuthComponent,
     LoginFormComponent,
-    RegisterFormComponent
+    RegisterFormComponent,
+    UserListComponent
   ],
   imports: [
     BrowserModule,

@@ -9,9 +9,11 @@
     </thead>
     <tbody>
     <tr *ngFor="let category of categories">
-        <td class="col-1">{{ category.id }}</td>
+        <td class="col-1">
+          <input class="form-control w-100" type="text" value="{{ category.id }}" disabled />
+        </td>
         <td class="col">
-          <input class="w-100" type="text" [(ngModel)]="category.name" value="{{ category.name }}">
+          <input class="form-control w-100" type="text" [(ngModel)]="category.name" value="{{ category.name }}" />
         </td>
         <td class="col-2">
           <button class="btn btn-primary py-1 me-3" (click)="updateCategory(category)">Save</button>
