@@ -27,4 +27,8 @@ export class UserService {
   toggleUserEnabled(id: number): Observable<any> {
     return this.http.patch(this.apiUrl + '/' + id + '/toggle', id)
   }
+
+  changePassword(id: number, currentPassword: string, newPassword: string, newPasswordConfirm: string): Observable<any> {
+    return this.http.patch(this.apiUrl + '/' + id + '/change-password', { currentPassword, newPassword, newPasswordConfirm })
+  }
 }

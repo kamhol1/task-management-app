@@ -4,10 +4,12 @@ import com.example.taskmanagementapp.config.UserAuthProvider;
 import com.example.taskmanagementapp.dto.CredentialsDto;
 import com.example.taskmanagementapp.dto.SignUpDto;
 import com.example.taskmanagementapp.dto.UserAuthDto;
+import com.example.taskmanagementapp.dto.UserDto;
 import com.example.taskmanagementapp.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,5 +37,11 @@ public class AuthController {
         UserAuthDto user = userService.register(signUpDto);
         user.setToken(userAuthProvider.createToken(user));
         return new ResponseEntity<>(user, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/get-user")
+    ResponseEntity<UserDto> getAuthenticatedUser() {
+        return ResponseEntity.ok(
+                userService.getAuthenticatedUser());
     }
 }

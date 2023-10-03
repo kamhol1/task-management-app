@@ -72,12 +72,14 @@ public class UserService {
         return mapToUserAuthDto(created);
     }
 
-    public User getCurrentUser() {
+    public UserDto getAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserAuthDto currentUser = (UserAuthDto) authentication.getPrincipal();
 
-        return userRepository.findByUsername(currentUser.getUsername())
+        User user = userRepository.findByUsername(currentUser.getUsername())
                 .orElseThrow(UserNotFoundException::new);
+
+        return mapToUserDto(user);
     }
 
     public List<UserListItemDto> getUsersAsListItems() {
@@ -90,6 +92,13 @@ public class UserService {
         return userRepository.findAll().stream()
                 .map(UserDtoMapper::mapToUserDto)
                 .toList();
+    }
+
+    public UserDto getUserByUsername(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(UserNotFoundException::new);
+
+        return mapToUserDto(user);
     }
 
     public UserDto updateUser(int id, UserDto userDto) {
@@ -107,5 +116,22 @@ public class UserService {
 
         User updated = userRepository.save(user);
         return mapToUserDto(updated);
+    }
+
+    public void changePassword(int id, PasswordChangeDto data) {
+        User user = userRepository.findById(id)
+                .orElseThrow(UserNotFoundException::new);
+
+        if (!passwordEncoder.matches(data.currentPassword(), user.getPassword())) {
+            throw new InvalidPasswordException();
+        }
+
+        if (!data.newPassword().equals(data.newPasswordConfirm())) {
+            throw new PasswordsDoNotMatchException();
+        }
+
+        user.setPassword(passwordEncoder.encode(data.newPassword()));
+        User updated = userRepository.save(user);
+        mapToUserDto(updated);
     }
 }

@@ -1,0 +1,38 @@
+<div class="row justify-content-md-center">
+  <h1 class="mb-4 text-center">My profile</h1>
+
+  <div class="col-4" style="min-width: 400px">
+    <label for="id">User Id: </label>
+    <input class="form-control" type="text" id="id" value="{{ user.id }}" disabled/> <br/>
+
+    <label for="username">Username: </label>
+    <input class="form-control" type="text" id="username" value="{{ user.username }}" disabled/> <br/>
+
+    <label for="firstName">First name: </label>
+    <input class="form-control" type="text" id="firstName" value="{{ user.firstName }}" disabled/> <br/>
+
+    <label for="lastName">Last name: </label>
+    <input class="form-control" type="text" id="lastName" value="{{ user.lastName }}" disabled/> <br/>
+
+    <label for="id">Role: </label>
+    <input class="form-control mb-2" type="text" id="role" value="{{ user.role |titlecase }}" disabled/> <br/>
+
+
+    <h3 class="mb-4 text-center">Password change form:</h3>
+
+    <form (ngSubmit)="changePassword()">
+      <label for="currentPassword">Current password: </label>
+      <input class="form-control" type="password" id="currentPassword" name="currentPassword" [(ngModel)]="currentPassword" /> <br/>
+
+      <label for="newPassword">New password: </label>
+      <input class="form-control" type="password" id="newPassword" name="newPassword" [(ngModel)]="newPassword" /> <br/>
+
+      <label for="newPasswordConfirm">Repeat new password: </label>
+      <input class="form-control" type="password" id="newPasswordConfirm" name="newPasswordConfirm" [(ngModel)]="newPasswordConfirm" /> <br/>
+
+      <button class="btn btn-primary mt-2" type="submit">
+        <i class="bi bi-check-lg mr-2"></i>Change password
+      </button>
+    </form>
+  </div>
+</div>

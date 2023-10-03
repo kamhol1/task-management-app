@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import jwt_decode from "jwt-decode";
+import {UserModel} from "../../models/user.model";
 
 @Injectable({
   providedIn: 'root'
@@ -45,6 +46,10 @@ export class AuthService {
 
   register(data: any): Observable<any> {
     return this.http.post("http://localhost:8080/register", data);
+  }
+
+  getAuthenticatedUser(): Observable<UserModel> {
+    return this.http.get<UserModel>("http://localhost:8080/get-user");
   }
 
   logout() {

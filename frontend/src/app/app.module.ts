@@ -21,6 +21,7 @@ import {LoginFormComponent} from './components/login-form/login-form.component';
 import {RegisterFormComponent} from './components/register-form/register-form.component';
 import {TokenInterceptorService} from "./interceptors/token-interceptor.service";
 import {UserListComponent} from './components/user-list/user-list.component';
+import { UserProfileComponent } from './components/user-profile/user-profile.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import {UserListComponent} from './components/user-list/user-list.component';
     AuthComponent,
     LoginFormComponent,
     RegisterFormComponent,
-    UserListComponent
+    UserListComponent,
+    UserProfileComponent
   ],
   imports: [
     BrowserModule,

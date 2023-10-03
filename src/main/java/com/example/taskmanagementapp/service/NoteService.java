@@ -1,6 +1,7 @@
 package com.example.taskmanagementapp.service;
 
 import com.example.taskmanagementapp.dto.NoteDto;
+import com.example.taskmanagementapp.dto.UserDto;
 import com.example.taskmanagementapp.exception.AccessDeniedException;
 import com.example.taskmanagementapp.exception.NoteNotFoundException;
 import com.example.taskmanagementapp.model.Note;
@@ -10,6 +11,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import static com.example.taskmanagementapp.dto.mapper.NoteDtoMapper.*;
+import static com.example.taskmanagementapp.dto.mapper.UserDtoMapper.mapToUser;
 
 @Service
 public class NoteService {
@@ -30,7 +32,7 @@ public class NoteService {
 
     @Transactional
     public int createNote(NoteDto noteDto) {
-        User user = userService.getCurrentUser();
+        User user = mapToUser(userService.getAuthenticatedUser());
 
         Note toSave = mapToNoteCreate(noteDto);
         toSave.setUser(user);
@@ -41,13 +43,13 @@ public class NoteService {
 
     @Transactional
     public int updateNote(int id, NoteDto noteDto) {
-        User user = userService.getCurrentUser();
+        UserDto user = userService.getAuthenticatedUser();
 
         Note toUpdate = noteRepository.findById(id).orElseThrow(
                 () -> new NoteNotFoundException(id)
         );
 
-        if (!toUpdate.getUser().getId().equals(user.getId())) {
+        if (!toUpdate.getUser().getId().equals(user.id())) {
             throw new AccessDeniedException("You do not have permission to edit this note");
         }
 
@@ -57,13 +59,13 @@ public class NoteService {
 
     @Transactional
     public int deleteNote(int id) {
-        User user = userService.getCurrentUser();
+        UserDto user = userService.getAuthenticatedUser();
 
         Note toDelete = noteRepository.findById(id).orElseThrow(
                 () -> new NoteNotFoundException(id)
         );
 
-        if (!toDelete.getUser().getId().equals(user.getId())) {
+        if (!toDelete.getUser().getId().equals(user.id())) {
             throw new AccessDeniedException("You do not have permission to delete this note");
         }
 

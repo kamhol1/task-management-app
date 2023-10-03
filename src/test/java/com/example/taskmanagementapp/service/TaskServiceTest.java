@@ -135,7 +135,7 @@ class TaskServiceTest {
 
 
         when(taskRepository.save(any())).thenReturn(task);
-        when(userService.getCurrentUser()).thenReturn(user);
+        when(userService.getAuthenticatedUser()).thenReturn(user);
 
         TaskDto created = taskService.createTask(dto);
         assertEquals(dto, created);
@@ -169,7 +169,7 @@ class TaskServiceTest {
 
         when(taskRepository.findById(1)).thenReturn(Optional.of(task));
         when(taskRepository.save(any())).thenReturn(task);
-        when(userService.getCurrentUser()).thenReturn(user);
+        when(userService.getAuthenticatedUser()).thenReturn(user);
 
         assertEquals(dto, taskService.updateTask(1, dto));
         verify(taskRepository).save(any());

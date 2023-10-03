@@ -5,7 +5,12 @@
 </div>
 
 <div *ngIf="loggedIn == true">
-  <span class="text-white me-3">{{ this.userData.username }}</span>
+  <a class="nav-link active p-2 me-3" style="display: inline" href="profile">
+    <span class="text-white">
+      {{ this.userData.username }}
+    </span>
+  </a>
+
   <button class="btn btn-outline-primary" type="submit"
           (click)="this.logout()">Logout
   </button>

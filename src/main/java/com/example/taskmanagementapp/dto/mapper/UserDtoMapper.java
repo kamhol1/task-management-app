@@ -21,6 +21,17 @@ public class UserDtoMapper {
         );
     }
 
+    public static User mapToUser(UserDto dto) {
+        return User.builder()
+                .id(dto.id())
+                .firstName(dto.firstName())
+                .lastName(dto.lastName())
+                .username(dto.username())
+                .role(dto.role())
+                .enabled(dto.enabled())
+                .build();
+    }
+
     public static User mapToUserUpdate(UserDto dto, User toUpdate) {
         toUpdate.setFirstName(dto.firstName());
         toUpdate.setLastName(dto.lastName());

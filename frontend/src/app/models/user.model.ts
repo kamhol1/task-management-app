@@ -4,5 +4,5 @@ export interface UserModel {
   lastName: string
   username: string
   role: string
-  enabled: boolean
+  enabled?: boolean
 }

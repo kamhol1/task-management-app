@@ -1,5 +1,6 @@
 package com.example.taskmanagementapp.controller;
 
+import com.example.taskmanagementapp.dto.PasswordChangeDto;
 import com.example.taskmanagementapp.dto.UserAuthDto;
 import com.example.taskmanagementapp.dto.UserDto;
 import com.example.taskmanagementapp.dto.UserListItemDto;
@@ -48,5 +49,11 @@ public class UserController {
                 "User with id " + updated.id() + " has been disabled";
 
         return ResponseEntity.ok(new MessageResponse(message));
+    }
+
+    @PatchMapping("/{id}/change-password")
+    ResponseEntity<MessageResponse> changePassword(@PathVariable int id, @Valid @RequestBody PasswordChangeDto data) {
+        userService.changePassword(id, data);
+        return ResponseEntity.ok(new MessageResponse("Password changed successfully"));
     }
 }

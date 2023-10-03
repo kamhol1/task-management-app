@@ -28,6 +28,7 @@ public class SecurityConfig {
                 .sessionManagement(customizer -> customizer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers(HttpMethod.POST, "/login", "/register").permitAll()
+                        .requestMatchers(HttpMethod.PATCH, "/api/users/{id}/change-password").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/users").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/categories/**", "/api/users/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/categories/**", "/api/users/**").hasRole("ADMIN")

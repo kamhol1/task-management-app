@@ -2,6 +2,7 @@ package com.example.taskmanagementapp.service;
 
 import com.example.taskmanagementapp.dto.TaskDetailsDto;
 import com.example.taskmanagementapp.dto.TaskDto;
+import com.example.taskmanagementapp.dto.UserDto;
 import com.example.taskmanagementapp.dto.mapper.TaskDtoMapper;
 import com.example.taskmanagementapp.exception.AccessDeniedException;
 import com.example.taskmanagementapp.exception.TaskNotFoundException;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 import static com.example.taskmanagementapp.dto.mapper.TaskDtoMapper.*;
+import static com.example.taskmanagementapp.dto.mapper.UserDtoMapper.mapToUser;
 
 @Service
 public class TaskService {
@@ -76,7 +78,7 @@ public class TaskService {
 
     @Transactional
     public TaskDto createTask(TaskDto taskDto) {
-        User user = userService.getCurrentUser();
+        User user = mapToUser(userService.getAuthenticatedUser());
 
         Task toSave = TaskDtoMapper.mapToTaskCreate(taskDto);
         toSave.setStatus(Status.NEW);
@@ -88,13 +90,13 @@ public class TaskService {
 
     @Transactional
     public TaskDto updateTask(int id, TaskDto taskDto) {
-        User user = userService.getCurrentUser();
+        UserDto user = userService.getAuthenticatedUser();
 
         Task toUpdate = taskRepository.findById(id).orElseThrow(
                 () -> new TaskNotFoundException(id)
         );
 
-        if (toUpdate.getUser() != null && !toUpdate.getUser().getId().equals(user.getId())) {
+        if (toUpdate.getUser() != null && !toUpdate.getUser().getId().equals(user.id())) {
             throw new AccessDeniedException("You do not have permission to edit this task");
         }
 
