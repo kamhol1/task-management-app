@@ -1,8 +1,10 @@
 package com.example.taskmanagementapp.service;
 
 import com.example.taskmanagementapp.dto.NoteDto;
+import com.example.taskmanagementapp.dto.UserDto;
 import com.example.taskmanagementapp.exception.NoteNotFoundException;
 import com.example.taskmanagementapp.model.Note;
+import com.example.taskmanagementapp.model.Role;
 import com.example.taskmanagementapp.model.Task;
 import com.example.taskmanagementapp.model.User;
 import com.example.taskmanagementapp.repository.NoteRepository;
@@ -69,9 +71,14 @@ class NoteServiceTest {
                 note.getUser().getUsername(),
                 note.getCreatedOn());
 
-        User user = User.builder()
-                .username("username")
-                .build();
+        UserDto user = new UserDto(
+                1,
+                "firstName",
+                "lastName",
+                "username",
+                Role.USER,
+                true
+        );
 
         when(noteRepository.save(any())).thenReturn(note);
         when(userService.getAuthenticatedUser()).thenReturn(user);
@@ -92,6 +99,15 @@ class NoteServiceTest {
                 .username("username")
                 .build();
 
+        UserDto userDto = new UserDto(
+                1,
+                "firstName",
+                "lastName",
+                "username",
+                Role.USER,
+                true
+        );
+
         note.setUser(user);
 
         NoteDto dto = new NoteDto(
@@ -105,7 +121,7 @@ class NoteServiceTest {
 
         when(noteRepository.findById(1)).thenReturn(Optional.of(note));
         when(noteRepository.save(any())).thenReturn(note);
-        when(userService.getAuthenticatedUser()).thenReturn(user);
+        when(userService.getAuthenticatedUser()).thenReturn(userDto);
 
         assertEquals(1, noteService.updateNote(1, dto));
         verify(noteRepository).findById(1);
@@ -132,10 +148,19 @@ class NoteServiceTest {
                 .username("username")
                 .build();
 
+        UserDto userDto = new UserDto(
+                1,
+                "firstName",
+                "lastName",
+                "username",
+                Role.USER,
+                true
+        );
+
         note.setUser(user);
 
         when(noteRepository.findById(1)).thenReturn(Optional.of(note));
-        when(userService.getAuthenticatedUser()).thenReturn(user);
+        when(userService.getAuthenticatedUser()).thenReturn(userDto);
 
         int deletedId = noteService.deleteNote(1);
         assertEquals(1, deletedId);

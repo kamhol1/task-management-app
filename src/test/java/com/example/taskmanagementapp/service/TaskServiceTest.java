@@ -2,8 +2,10 @@ package com.example.taskmanagementapp.service;
 
 import com.example.taskmanagementapp.dto.TaskDetailsDto;
 import com.example.taskmanagementapp.dto.TaskDto;
+import com.example.taskmanagementapp.dto.UserDto;
 import com.example.taskmanagementapp.exception.TaskNotFoundException;
 import com.example.taskmanagementapp.model.Category;
+import com.example.taskmanagementapp.model.Role;
 import com.example.taskmanagementapp.model.Task;
 import com.example.taskmanagementapp.model.User;
 import com.example.taskmanagementapp.repository.TaskRepository;
@@ -121,6 +123,15 @@ class TaskServiceTest {
                 .username("username")
                 .build();
 
+        UserDto userDto = new UserDto(
+                1,
+                "firstName",
+                "lastName",
+                "username",
+                Role.USER,
+                true
+        );
+
         TaskDto dto = new TaskDto(
                 task.getId(),
                 task.getTitle(),
@@ -135,7 +146,7 @@ class TaskServiceTest {
 
 
         when(taskRepository.save(any())).thenReturn(task);
-        when(userService.getAuthenticatedUser()).thenReturn(user);
+        when(userService.getAuthenticatedUser()).thenReturn(userDto);
 
         TaskDto created = taskService.createTask(dto);
         assertEquals(dto, created);
@@ -155,6 +166,15 @@ class TaskServiceTest {
 
         task.setUser(user);
 
+        UserDto userDto = new UserDto(
+                1,
+                "firstName",
+                "lastName",
+                "username",
+                Role.USER,
+                true
+        );
+
         TaskDto dto = new TaskDto(
                 task.getId(),
                 "Updated title",
@@ -169,7 +189,7 @@ class TaskServiceTest {
 
         when(taskRepository.findById(1)).thenReturn(Optional.of(task));
         when(taskRepository.save(any())).thenReturn(task);
-        when(userService.getAuthenticatedUser()).thenReturn(user);
+        when(userService.getAuthenticatedUser()).thenReturn(userDto);
 
         assertEquals(dto, taskService.updateTask(1, dto));
         verify(taskRepository).save(any());
