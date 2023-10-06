@@ -7,11 +7,10 @@
 
 ## Features and usage
 
-- **Task Management:** Create and manage tasks with detailed information and preferences. Tasks can be assigned specific categories, due dates, status, and priority, allowing users to prioritize their workload effectively. Each task is equipped with a notes section, where users can add relevant details, updates, or additional information. Notes can be edited or deleted as the task progresses. If a task has been completed, users have the option to mark it with an appropriate status, which will remove the task from the main list while still being accessible through filtering and searching options.
-
-- **Category Customization:** Users have the ability to create new categories, edit existing ones and delete categories that are no longer needed. This flexibility ensures that tasks are organized in a manner that suits individual preferences.
-
-- **Sorting and Filtering:** The task list is equipped with sorting and filtering options, allowing users to arrange tasks based on criteria such as id, task title, due date, status, or category. This ensures that users can focus on tasks that require immediate attention.
+- **Task Management:** Create and manage tasks with detailed information and preferences. Each task can be assigned specific category, user, due date, status, and priority, allowing users to prioritize their workload effectively. Each task is equipped with a notes section, where users can add relevant details, updates, or additional information. Notes can be edited or deleted as the task progresses. If a task has been completed, users have the option to mark it with an appropriate status, which will remove the task from the main list while still being accessible through filtering and searching options.
+- **Sorting and Filtering:** The task list is equipped with sorting and filtering options, allowing users to arrange tasks based on criteria such as id, title, assigned user, due date, status, priority or target time. This ensures that users can focus on tasks that require immediate attention.
+- **Security:** The app is secured using Spring Security authentication and authorization with JWT token utilization. There are two available roles: "Admin" and "User.
+- **Admin options:** Admins have some additional capabilities for maintaining the service, such as customizing categories and managing users (adding, editing, deleting).
 
 ## Technologies
 
@@ -45,7 +44,8 @@ To set up and run the project on your local machine:
 
     `ng serve`
 
-6. **Access the App:** Open your browser and navigate to `http://localhost:4200`
+6. **Access the App:** Open your browser and navigate to `http://localhost:4200`.
+   By default, the users created for testing purposes are: "admin" and "user" with a password corresponding to the username.
 
 ## Screenshots
 
@@ -60,3 +60,15 @@ To set up and run the project on your local machine:
 
 ![Category list](screenshots/screenshot4.png)
 > Category list
+
+![User list](screenshots/screenshot5.png)
+> User list
+
+![Login form](screenshots/screenshot6.png)
+> Login form
+
+![Register form](screenshots/screenshot7.png)
+> Register form
+
+![User profile](screenshots/screenshot8.png)
+> User profile page and password change form
